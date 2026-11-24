@@ -1,0 +1,2851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>MANNU PIZZA — Bahadurganj, Bihar Food Delivery Website</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Standards-compliant QR Code matrix generator via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <script>
+        // Configure Tailwind theme fonts and dark glassmorphic color palette
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        obsidian: '#06070d',
+                        pizzaRed: '#e11d48',
+                        pizzaGold: '#facc15',
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #06070d;
+            color: #f8fafc;
+            min-height: 100dvh;
+            overflow-x: hidden;
+        }
+
+        /* Ambient dark RGB glow backdrop */
+        .rgb-ambient-bg {
+            background:
+                radial-gradient(circle at 14% 18%, rgba(225, 29, 72, 0.22), transparent 42%),
+                radial-gradient(circle at 86% 22%, rgba(56, 189, 248, 0.20), transparent 45%),
+                radial-gradient(circle at 50% 88%, rgba(168, 85, 247, 0.22), transparent 48%),
+                #06070d;
+        }
+
+        @keyframes rgbHueShift {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .rgb-cycle {
+            animation: rgbHueShift 7s linear infinite;
+        }
+
+        /* Continuous 3D floating & rotating MANNU emblem */
+        .scene-3d {
+            perspective: 950px;
+        }
+
+        @keyframes float3D {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-9px); }
+        }
+
+        @keyframes spin3D {
+            0% { transform: rotateY(-24deg) rotateX(10deg); }
+            50% { transform: rotateY(24deg) rotateX(-8deg); }
+            100% { transform: rotateY(-24deg) rotateX(10deg); }
+        }
+
+        .logo-float-wrap {
+            animation: float3D 4.2s ease-in-out infinite;
+        }
+
+        .logo-3d-card {
+            transform-style: preserve-3d;
+            animation: spin3D 6.5s ease-in-out infinite;
+        }
+
+        .logo-3d-depth {
+            transform: translateZ(18px);
+        }
+
+        .logo-3d-glow {
+            transform: translateZ(-12px);
+        }
+
+        /* Glassmorphic panel & animated RGB rim */
+        .glass-panel {
+            background: rgba(12, 16, 28, 0.78);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow:
+                0 22px 55px rgba(0, 0, 0, 0.65),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        .rgb-ring-border {
+            position: relative;
+        }
+
+        .rgb-ring-border::before {
+            content: '';
+            position: absolute;
+            inset: -1.5px;
+            border-radius: inherit;
+            padding: 1.5px;
+            background: linear-gradient(120deg, #ff2a85, #00e5ff, #a855f7, #facc15, #ff2a85);
+            background-size: 300% 300%;
+            animation: rgbBorderFlow 6s ease infinite;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        @keyframes rgbBorderFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Fixed vertical side credit badge */
+        .side-credit-badge {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+        }
+
+        /* Animated delivery rider on live order tracker */
+        @keyframes scooterGlide {
+            0%, 100% { transform: translateX(0px); }
+            50% { transform: translateX(10px); }
+        }
+
+        .scooter-anim {
+            animation: scooterGlide 2.2s ease-in-out infinite;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="rgb-ambient-bg relative min-h-dvh text-slate-100">
+
+    <!-- Fixed Vertical Left-Edge Credit Badge ('Created by Mannu bhai') -->
+    <aside aria-hidden="true" class="pointer-events-none fixed left-0 top-1/2 -translate-y-1/2 z-40 select-none">
+        <div class="side-credit-badge px-2 py-3 rounded-r-xl bg-slate-950/90 border border-l-0 border-white/15 shadow-xl">
+            <span class="text-[10px] sm:text-[11px] font-black tracking-[0.18em] bg-gradient-to-b from-rose-400 via-amber-300 to-cyan-300 bg-clip-text text-transparent">
+                Created by Mannu bhai
+            </span>
+        </div>
+    </aside>
+
+    <!-- Toast Notification Banner -->
+    <div id="toast-banner" role="status" aria-live="polite" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-[70] max-w-sm w-[92%] px-4 py-2.5 rounded-2xl bg-slate-900/95 border border-cyan-400/40 text-xs font-bold text-white shadow-2xl flex items-center gap-2.5">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-sm shrink-0"></i>
+        <span id="toast-message">Updated</span>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- STAGE 1: FIRST-PAGE 3D LOGIN & CREATE ACCOUNT GATEWAY                 -->
+    <!-- ===================================================================== -->
+    <div id="gateway-stage" class="min-h-dvh flex flex-col justify-between px-4 sm:px-7 py-4">
+        <!-- Top Bar -->
+        <header class="w-full max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-3 z-20">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-slate-200">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>MANNU PIZZA • Bahadurganj, Bihar</span>
+            </div>
+
+            <!-- Prominent 'Created by Mannu bhai' Badge -->
+            <div class="rgb-ring-border inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-950/90 text-xs sm:text-sm font-black tracking-wide shadow-lg">
+                <i class="fa-solid fa-crown text-amber-400"></i>
+                <span class="bg-gradient-to-r from-rose-400 via-cyan-300 to-violet-400 bg-clip-text text-transparent">
+                    Created by Mannu bhai
+                </span>
+            </div>
+        </header>
+
+        <!-- Centered 3D Emblem & Login / Create Account Card -->
+        <main class="w-full max-w-md mx-auto my-auto py-5 z-20">
+            <section class="glass-panel rgb-ring-border rounded-3xl p-5 sm:p-7 space-y-5">
+
+                <!-- Continuously Animated 3D Emblem ('MANNU') -->
+                <div class="scene-3d flex flex-col items-center justify-center pt-1">
+                    <div class="logo-float-wrap">
+                        <div class="logo-3d-card relative w-44 sm:w-48 h-24 sm:h-28 rounded-2xl bg-gradient-to-br from-slate-900/95 via-slate-800/85 to-slate-950/95 border border-white/20 flex flex-col items-center justify-center shadow-2xl">
+                            <div class="logo-3d-glow rgb-cycle absolute -inset-2 rounded-3xl bg-gradient-to-r from-rose-500/35 via-cyan-400/35 to-purple-500/35 blur-xl -z-10"></div>
+                            <div class="logo-3d-depth flex flex-col items-center">
+                                <div class="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.26em] text-cyan-300">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                    <span>PIZZA 3D</span>
+                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                                </div>
+                                <div class="rgb-cycle mt-1 text-3xl sm:text-4xl font-black tracking-[0.16em] bg-gradient-to-r from-rose-400 via-amber-200 to-cyan-300 bg-clip-text text-transparent">
+                                    MANNU
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-xs text-slate-400 text-center">
+                        Login or create your account to order fresh pizza in Bahadurganj, Bihar.
+                    </p>
+                </div>
+
+                <!-- Tab Switcher: Login / Create Account -->
+                <div class="grid grid-cols-2 gap-1.5 p-1 rounded-2xl bg-slate-950/85 border border-white/10">
+                    <button id="tab-login-btn" type="button" onclick="switchAuthTab('login')" aria-selected="true" class="h-9 rounded-xl text-xs sm:text-sm font-extrabold text-white bg-gradient-to-r from-rose-600 via-purple-600 to-cyan-600 shadow transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-right-to-bracket text-xs"></i>
+                        <span>Login</span>
+                    </button>
+                    <button id="tab-register-btn" type="button" onclick="switchAuthTab('register')" aria-selected="false" class="h-9 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-user-plus text-xs"></i>
+                        <span>Create Account</span>
+                    </button>
+                </div>
+
+                <!-- Validation & Session Feedback -->
+                <div id="auth-feedback" role="status" aria-live="polite" class="hidden rounded-2xl px-3.5 py-2.5 text-xs font-semibold border flex items-start gap-2.5"></div>
+
+                <!-- LOGIN FORM -->
+                <form id="login-form" onsubmit="handleLoginSubmit(event)" novalidate class="space-y-3.5">
+                    <div>
+                        <label for="login-identifier" class="block text-xs font-bold text-slate-200 mb-1.5">Email or Username</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input id="login-identifier" type="text" autocomplete="username" placeholder="mannu@example.com or mannu_bhai" class="w-full bg-slate-950/75 border border-white/15 focus:border-cyan-400 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label for="login-password" class="block text-xs font-bold text-slate-200">Password</label>
+                            <button type="button" onclick="fillDemoCredentials()" class="text-[11px] font-bold text-cyan-300 hover:text-cyan-200 transition">
+                                Use Demo Account
+                            </button>
+                        </div>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input id="login-password" type="password" autocomplete="current-password" placeholder="Enter your password" class="w-full bg-slate-950/75 border border-white/15 focus:border-cyan-400 rounded-xl pl-10 pr-10 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none transition">
+                            <button type="button" onclick="togglePassword('login-password', 'login-eye')" aria-label="Toggle login password visibility" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs p-1">
+                                <i id="login-eye" class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs text-slate-300">
+                        <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                            <input id="login-remember" type="checkbox" checked class="w-4 h-4 rounded accent-cyan-400">
+                            <span>Remember session</span>
+                        </label>
+                        <button type="button" onclick="switchAuthTab('register')" class="text-rose-400 hover:text-rose-300 font-bold transition">
+                            Create Account
+                        </button>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 px-4 rounded-2xl font-black text-sm text-white bg-gradient-to-r from-rose-600 via-purple-600 to-cyan-600 hover:brightness-110 active:scale-[0.99] shadow-lg transition flex items-center justify-center gap-2">
+                        <span>Login to Continue</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </form>
+
+                <!-- CREATE ACCOUNT FORM -->
+                <form id="register-form" onsubmit="handleRegisterSubmit(event)" novalidate class="hidden space-y-3">
+                    <div>
+                        <label for="reg-name" class="block text-xs font-bold text-slate-200 mb-1.5">Full Name</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-id-card absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input id="reg-name" type="text" autocomplete="name" placeholder="Your full name" class="w-full bg-slate-950/75 border border-white/15 focus:border-rose-400 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="reg-email" class="block text-xs font-bold text-slate-200 mb-1.5">Email Address</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input id="reg-email" type="email" autocomplete="email" placeholder="you@example.com" class="w-full bg-slate-950/75 border border-white/15 focus:border-rose-400 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="reg-password" class="block text-xs font-bold text-slate-200 mb-1.5">Password (min. 6 chars)</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-key absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input id="reg-password" type="password" autocomplete="new-password" placeholder="At least 6 characters" class="w-full bg-slate-950/75 border border-white/15 focus:border-rose-400 rounded-xl pl-10 pr-10 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none transition">
+                            <button type="button" onclick="togglePassword('reg-password', 'reg-eye')" aria-label="Toggle create password visibility" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs p-1">
+                                <i id="reg-eye" class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="reg-confirm" class="block text-xs font-bold text-slate-200 mb-1.5">Confirm Password</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-shield-check absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input id="reg-confirm" type="password" autocomplete="new-password" placeholder="Re-enter password" class="w-full bg-slate-950/75 border border-white/15 focus:border-rose-400 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none transition">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 px-4 rounded-2xl font-black text-sm text-white bg-gradient-to-r from-cyan-500 via-purple-600 to-rose-600 hover:brightness-110 active:scale-[0.99] shadow-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-user-plus text-xs"></i>
+                        <span>Create Account &amp; Continue</span>
+                    </button>
+                </form>
+
+                <!-- Post-Login/Signup 'Continue to MANNU PIZZA' Action Box -->
+                <div id="post-auth-continue-box" class="hidden rounded-2xl p-3.5 bg-emerald-950/50 border border-emerald-400/40 space-y-2.5">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="font-extrabold text-emerald-300">
+                            <i class="fa-solid fa-circle-check mr-1"></i>
+                            Signed in as <span id="auth-session-badge">Mannu bhai</span>
+                        </span>
+                        <button type="button" onclick="handleLogoutToGateway()" class="text-slate-300 hover:text-white underline text-[11px]">
+                            Switch User
+                        </button>
+                    </div>
+                    <button type="button" onclick="enterMannuPizzaStore()" class="w-full py-2.5 px-4 rounded-xl font-black text-sm text-slate-950 bg-amber-400 hover:bg-amber-300 transition flex items-center justify-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-pizza-slice"></i>
+                        <span>Continue to MANNU PIZZA</span>
+                    </button>
+                </div>
+
+                <!-- Direct Enter MANNU PIZZA Trigger -->
+                <div class="pt-2 border-t border-white/10 flex items-center justify-between gap-2">
+                    <span class="text-[11px] text-slate-400">Explore Bahadurganj menu directly</span>
+                    <button type="button" onclick="enterMannuPizzaStore()" class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-extrabold text-amber-300 transition flex items-center gap-1.5 shrink-0">
+                        <span>Enter MANNU PIZZA</span>
+                        <i class="fa-solid fa-arrow-right text-[11px]"></i>
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="w-full max-w-5xl mx-auto text-center text-[11px] text-slate-400 pb-1 z-20">
+            MANNU PIZZA • Created by Mannu bhai • Bahadurganj, Bihar
+        </footer>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- STAGE 2: COMPLETE MANNU PIZZA WEBSITE & DELIVERY STOREFRONT           -->
+    <!-- ===================================================================== -->
+    <div id="store-stage" class="hidden min-h-dvh pb-24 pl-7 sm:pl-10">
+
+        <!-- Sticky Website Header -->
+        <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-xl border-b border-white/10">
+            <div class="max-w-6xl mx-auto px-3 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-2.5">
+
+                <!-- Brand Logo & Bahadurganj Delivery Switcher -->
+                <div class="flex items-center gap-2.5 sm:gap-3">
+                    <button type="button" onclick="switchStoreView('menu')" class="flex items-center gap-2.5 text-left group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-600 to-amber-500 flex items-center justify-center text-white font-black text-lg shadow-lg group-hover:scale-105 transition">
+                            <i class="fa-solid fa-pizza-slice"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-base sm:text-lg font-black tracking-tight text-white">MANNU PIZZA</span>
+                                <span class="hidden md:inline-flex px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                                    Created by Mannu bhai
+                                </span>
+                            </div>
+                            <div id="active-user-pill" class="text-[11px] text-slate-400 font-medium">
+                                Bahadurganj, Bihar Delivery
+                            </div>
+                        </div>
+                    </button>
+
+                    <!-- Delivery Location Switcher (Defaults to Bahadurganj, Bihar; Purnia & Araria excluded) -->
+                    <button type="button" onclick="openLocationModal()" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/12 text-xs font-bold text-slate-200 flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-location-dot text-rose-400"></i>
+                        <span id="current-location-label" class="max-w-[130px] sm:max-w-[185px] truncate">Bahadurganj, Bihar</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+                    </button>
+                </div>
+
+                <!-- Desktop Navigation, Account, Sign Out & Cart Button -->
+                <div class="flex items-center gap-2">
+                    <nav class="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
+                        <button id="nav-menu-btn" type="button" onclick="switchStoreView('menu')" class="px-3.5 py-1.5 rounded-lg text-xs font-extrabold bg-rose-600 text-white transition">
+                            Menu
+                        </button>
+                        <button id="nav-pricelist-btn" type="button" onclick="switchStoreView('pricelist')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:text-white transition">
+                            Price List
+                        </button>
+                        <button id="nav-offers-btn" type="button" onclick="switchStoreView('offers')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:text-white transition">
+                            Offers
+                        </button>
+                        <button id="nav-track-btn" type="button" onclick="switchStoreView('track')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:text-white transition">
+                            Track Order
+                        </button>
+                    </nav>
+
+                    <button type="button" onclick="backToLoginGateway()" title="Login / Create Account" class="px-2.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/12 text-xs font-bold text-cyan-300 flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-user-circle"></i>
+                        <span class="hidden sm:inline">Account</span>
+                    </button>
+
+                    <button type="button" onclick="handleLogoutToGateway()" title="Sign Out" class="px-2.5 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-400/30 text-xs font-bold text-rose-200 flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span class="hidden sm:inline">Sign Out</span>
+                    </button>
+
+                    <button type="button" onclick="openCartDrawer()" class="relative px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-amber-500 hover:brightness-110 text-xs font-black text-white shadow-lg flex items-center gap-2 transition">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <span>Cart</span>
+                        <span id="header-cart-count" class="px-1.5 py-0.5 rounded-full bg-slate-950/80 text-amber-300 text-[11px] font-black">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Bar, Pure Veg Toggle & Category Tabs -->
+            <div id="store-filter-bar" class="max-w-6xl mx-auto px-3 sm:px-6 pb-3 space-y-2.5">
+                <div class="flex flex-wrap sm:flex-nowrap items-center gap-2">
+                    <div class="relative flex-1 min-w-[190px]">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input id="menu-search-input" type="text" oninput="renderStorefront()" placeholder="Search pizzas, garlic bread, drinks or ingredients..." class="w-full bg-white/5 border border-white/12 focus:border-amber-400 rounded-xl pl-9 pr-8 py-2 text-xs sm:text-sm text-white placeholder:text-slate-500 focus:outline-none transition">
+                        <button id="clear-search-btn" type="button" onclick="clearSearchInput()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs p-1">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- Pure Veg Filter Switch -->
+                    <button id="pure-veg-toggle" type="button" onclick="togglePureVeg()" aria-pressed="false" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/12 text-xs font-extrabold text-slate-200 flex items-center gap-2 transition shrink-0">
+                        <span class="w-4 h-4 rounded border-2 border-emerald-400 flex items-center justify-center">
+                            <span id="pure-veg-dot" class="w-2 h-2 rounded-full bg-emerald-400 opacity-30 transition"></span>
+                        </span>
+                        <span>Pure Veg</span>
+                    </button>
+                </div>
+
+                <!-- Category Filter Pills -->
+                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
+                    <button data-cat="All" type="button" onclick="selectCategory('All')" class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-black bg-amber-400 text-slate-950 shrink-0 transition">
+                        All Items (16)
+                    </button>
+                    <button data-cat="Veg Pizzas" type="button" onclick="selectCategory('Veg Pizzas')" class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 shrink-0 transition">
+                        Veg Pizzas (5)
+                    </button>
+                    <button data-cat="Non-Veg Pizzas" type="button" onclick="selectCategory('Non-Veg Pizzas')" class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 shrink-0 transition">
+                        Non-Veg Pizzas (4)
+                    </button>
+                    <button data-cat="Sides" type="button" onclick="selectCategory('Sides')" class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 shrink-0 transition">
+                        Sides (4)
+                    </button>
+                    <button data-cat="Beverages & Desserts" type="button" onclick="selectCategory('Beverages & Desserts')" class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 shrink-0 transition">
+                        Beverages &amp; Desserts (3)
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Website Content Container -->
+        <main class="max-w-6xl mx-auto px-3 sm:px-6 pt-4 space-y-6">
+
+            <!-- Promo Strip Banner (MANNU25 & PIZZA20 only) -->
+            <section class="glass-panel rounded-2xl p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3 border border-amber-400/25">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-400/15 border border-amber-400/40 flex items-center justify-center text-amber-300 text-base shrink-0">
+                        <i class="fa-solid fa-tags"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs sm:text-sm font-black text-white">
+                            Bahadurganj Offers — Use <span class="text-amber-300">MANNU25</span> (₹25 off ₹249+) or <span class="text-cyan-300">PIZZA20</span> (20% off ₹399+)
+                        </p>
+                        <p class="text-[11px] text-slate-400">
+                            Tap any price (₹) on menu cards or Price List to open its exact UPI QR • 5% GST in cart
+                        </p>
+                    </div>
+                </div>
+                <button type="button" onclick="switchStoreView('offers')" class="px-3 py-1.5 rounded-xl bg-amber-400 text-slate-950 text-xs font-black hover:bg-amber-300 transition">
+                    View Offers
+                </button>
+            </section>
+
+            <!-- VIEW 1: MENU VIEW -->
+            <section id="view-menu" class="space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-black text-white">MANNU PIZZA Menu</h1>
+                        <p id="menu-results-summary" class="text-xs text-slate-400">Showing all 16 items • Tap any ₹ price for direct QR or add to cart</p>
+                    </div>
+                    <button type="button" onclick="switchStoreView('pricelist')" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-extrabold text-amber-300 flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-list-ol"></i>
+                        <span>Full Price List</span>
+                    </button>
+                </div>
+
+                <!-- Dynamic Menu Cards Grid -->
+                <div id="menu-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </section>
+
+            <!-- VIEW 2: FULL PRICE LIST VIEW -->
+            <section id="view-pricelist" class="hidden space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-white">Full Price List (₹ INR)</h2>
+                        <p class="text-xs text-slate-400">Tap any price button to open its exact UPI QR code, or tap Add + to put in cart</p>
+                    </div>
+                    <button type="button" onclick="switchStoreView('menu')" class="px-3.5 py-2 rounded-xl bg-rose-600 text-white text-xs font-extrabold hover:bg-rose-500 transition">
+                        Back to Menu Cards
+                    </button>
+                </div>
+
+                <div id="pricelist-container" class="space-y-6"></div>
+            </section>
+
+            <!-- VIEW 3: OFFERS VIEW -->
+            <section id="view-offers" class="hidden space-y-5">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-black text-white">Active MANNU PIZZA Offers</h2>
+                    <p class="text-xs text-slate-400">Tap any coupon code to copy and apply inside your cart</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass-panel rounded-2xl p-5 border border-amber-400/30 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-black">FLAT ₹25 OFF</span>
+                            <span class="text-xs font-bold text-slate-400">Min. Order ₹249</span>
+                        </div>
+                        <h3 class="text-lg font-black text-white">Code: MANNU25</h3>
+                        <p class="text-xs text-slate-300">Get flat ₹25 instant discount on pizza and side orders of ₹249 or above in Bahadurganj, Bihar.</p>
+                        <button type="button" onclick="copyAndApplyCoupon('MANNU25')" class="w-full py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black transition">
+                            Copy &amp; Apply MANNU25
+                        </button>
+                    </div>
+
+                    <div class="glass-panel rounded-2xl p-5 border border-cyan-400/30 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-3 py-1 rounded-full bg-cyan-400/20 text-cyan-300 text-xs font-black">20% OFF</span>
+                            <span class="text-xs font-bold text-slate-400">Min. Order ₹399</span>
+                        </div>
+                        <h3 class="text-lg font-black text-white">Code: PIZZA20</h3>
+                        <p class="text-xs text-slate-300">Enjoy 20% off on orders of ₹399 or more across pizzas, sides, beverages, and desserts.</p>
+                        <button type="button" onclick="copyAndApplyCoupon('PIZZA20')" class="w-full py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 text-xs font-black transition">
+                            Copy &amp; Apply PIZZA20
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 4: TRACK ORDER VIEW (LOCKED UNTIL WHATSAPP PROOF IS SENT) -->
+            <section id="view-track" class="hidden space-y-5">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-black text-white">Live Order Tracker</h2>
+                    <p class="text-xs text-slate-400">Unlocked only after payment verification and sending WhatsApp proof</p>
+                </div>
+
+                <!-- Locked State Card -->
+                <div id="tracker-locked-card" class="glass-panel rounded-3xl p-6 sm:p-8 text-center space-y-4 border border-amber-400/30">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-400/15 border border-amber-400/40 flex items-center justify-center text-amber-300 text-2xl">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-black text-white">Live Order Tracker Is Locked</h3>
+                    <p id="tracker-lock-reason" class="text-xs sm:text-sm text-slate-300 max-w-md mx-auto">
+                        Complete your order in the cart, verify payment in Step 2, and click "Send Order &amp; Payment Proof on WhatsApp (+918700475480)" in Step 3 to unlock the 30-minute live order tracker.
+                    </p>
+                    <div class="flex flex-wrap items-center justify-center gap-2.5 pt-1">
+                        <button type="button" onclick="openCartDrawer()" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-black transition">
+                            Open Cart &amp; Checkout
+                        </button>
+                        <button id="tracker-reopen-proof-btn" type="button" onclick="openCheckoutModalAtStep(3)" class="hidden px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black transition">
+                            Send WhatsApp Proof to Unlock
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Unlocked 30-Minute Live Tracker -->
+                <div id="tracker-unlocked-card" class="hidden glass-panel rounded-3xl p-5 sm:p-7 space-y-6 border border-emerald-400/30">
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
+                        <div>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-black">
+                                <i class="fa-solid fa-circle-check"></i> WhatsApp Proof Sent &amp; Verified
+                            </span>
+                            <h3 id="tracked-order-id" class="mt-1.5 text-lg sm:text-xl font-black text-white">Order #MP0000</h3>
+                            <p id="tracked-order-address" class="text-xs text-slate-300">Delivering to Bahadurganj, Bihar</p>
+                        </div>
+
+                        <div class="px-4 py-2.5 rounded-2xl bg-slate-950/80 border border-amber-400/35 text-right">
+                            <div class="text-[10px] font-bold uppercase tracking-wider text-amber-300">Estimated Delivery</div>
+                            <div id="tracker-countdown" class="text-xl sm:text-2xl font-black text-white tabular-nums">30:00</div>
+                        </div>
+                    </div>
+
+                    <!-- Animated Delivery Route Strip -->
+                    <div class="rounded-2xl bg-slate-950/80 border border-white/10 p-4 space-y-3">
+                        <div class="flex items-center justify-between text-xs font-bold text-slate-300">
+                            <span><i class="fa-solid fa-store text-rose-400 mr-1"></i> MANNU PIZZA Kitchen</span>
+                            <span class="scooter-anim text-amber-300 font-black">
+                                <i class="fa-solid fa-motorcycle mr-1"></i> Bahadurganj Rider
+                            </span>
+                            <span><i class="fa-solid fa-house text-emerald-400 mr-1"></i> Customer Doorstep</span>
+                        </div>
+                        <div class="w-full h-2.5 rounded-full bg-slate-800 overflow-hidden">
+                            <div id="tracker-progress-bar" class="h-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-400 transition-all duration-500" style="width: 35%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 4-Stage Progress Steps -->
+                    <div id="tracker-stages-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+
+                    <!-- Confirmed Items & UTR Summary -->
+                    <div class="rounded-2xl bg-slate-950/70 border border-white/10 p-4 flex flex-wrap items-center justify-between gap-3 text-xs">
+                        <div>
+                            <span class="text-slate-400">Payment Ref / UTR:</span>
+                            <span id="tracked-utr-ref" class="ml-1.5 font-black text-cyan-300">—</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400">Paid Total:</span>
+                            <span id="tracked-paid-total" class="ml-1.5 font-black text-emerald-300">₹0</span>
+                        </div>
+                        <button type="button" onclick="openWhatsAppProofLink()" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black flex items-center gap-1.5 transition">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                            <span>Send Order &amp; Payment Proof on WhatsApp (+918700475480)</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Mobile Bottom Navigation Bar -->
+        <nav aria-label="Mobile Website Navigation" class="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-slate-950/95 backdrop-blur-xl border-t border-white/12 pb-[max(0.35rem,env(safe-area-inset-bottom))]">
+            <div class="grid grid-cols-4 text-center">
+                <button id="mob-nav-menu" type="button" onclick="switchStoreView('menu')" class="py-2.5 text-[11px] font-black text-rose-400 flex flex-col items-center gap-1">
+                    <i class="fa-solid fa-pizza-slice text-sm"></i>
+                    <span>Menu</span>
+                </button>
+                <button id="mob-nav-pricelist" type="button" onclick="switchStoreView('pricelist')" class="py-2.5 text-[11px] font-bold text-slate-400 flex flex-col items-center gap-1">
+                    <i class="fa-solid fa-list-ol text-sm"></i>
+                    <span>Prices</span>
+                </button>
+                <button id="mob-nav-offers" type="button" onclick="switchStoreView('offers')" class="py-2.5 text-[11px] font-bold text-slate-400 flex flex-col items-center gap-1">
+                    <i class="fa-solid fa-tags text-sm"></i>
+                    <span>Offers</span>
+                </button>
+                <button id="mob-nav-track" type="button" onclick="switchStoreView('track')" class="py-2.5 text-[11px] font-bold text-slate-400 flex flex-col items-center gap-1">
+                    <i id="mob-track-lock-icon" class="fa-solid fa-lock text-sm"></i>
+                    <span>Track</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- DEDICATED PER-PRICE UPI QR CODE MODAL                                 -->
+    <!-- ===================================================================== -->
+    <div id="per-price-qr-modal" class="hidden fixed inset-0 z-[65] bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-panel rounded-t-3xl sm:rounded-3xl w-full max-w-md max-h-[92dvh] flex flex-col border border-cyan-400/30 overflow-hidden">
+            <div class="px-5 py-4 bg-slate-900/95 border-b border-white/10 flex items-center justify-between shrink-0">
+                <div>
+                    <span class="text-[10px] font-black uppercase tracking-wider text-cyan-300">Exact Price UPI QR</span>
+                    <h2 id="per-price-modal-title" class="text-base sm:text-lg font-black text-white">Pay ₹0</h2>
+                </div>
+                <button type="button" onclick="closePerPriceQrModal()" aria-label="Close price QR modal" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="p-5 overflow-y-auto space-y-4">
+                <div class="rounded-2xl bg-slate-950/85 border border-white/12 p-3.5 flex items-center justify-between gap-3">
+                    <div class="min-w-0">
+                        <div id="per-price-item-label" class="text-sm font-black text-white truncate">Item Name</div>
+                        <div id="per-price-meta-label" class="text-xs text-slate-400">Size • Receiver: MANAUWAR REZA</div>
+                        <div class="text-[11px] font-mono text-amber-300 mt-0.5">manauwa098765@nyes</div>
+                    </div>
+                    <div id="per-price-amount-badge" class="px-3.5 py-2 rounded-2xl bg-amber-400 text-slate-950 text-lg font-black shrink-0">
+                        ₹0
+                    </div>
+                </div>
+
+                <!-- Scannable QR Code Canvas for Exact Price -->
+                <div class="flex flex-col items-center justify-center space-y-3">
+                    <div class="inline-flex flex-col items-center rounded-2xl bg-white p-4 shadow-inner border border-slate-200">
+                        <canvas id="per-price-qr-canvas" width="248" height="248" aria-label="Per-price UPI QR Code" class="w-52 h-52 sm:w-56 sm:h-56 block"></canvas>
+                        <div class="mt-2 text-[11px] font-extrabold text-slate-900 tracking-wide">
+                            MANAUWAR REZA • <span id="per-price-qr-caption" class="text-rose-700">₹0</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-center gap-2 w-full">
+                        <button type="button" onclick="downloadPerPriceQrPng()" class="px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black flex items-center gap-1.5 shadow transition">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Download QR Code (PNG)</span>
+                        </button>
+                        <button type="button" onclick="copyUpiId()" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-extrabold text-white flex items-center gap-1.5 transition">
+                            <i class="fa-regular fa-copy"></i>
+                            <span>Copy UPI ID</span>
+                        </button>
+                        <a id="per-price-upi-link" href="upi://pay?pa=manauwa098765@nyes&pn=MANAUWAR%20REZA&cu=INR&tn=MANNU%20PIZZA" class="px-3.5 py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 text-xs font-black flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                            <span>Open UPI App</span>
+                        </a>
+                    </div>
+
+                    <button type="button" onclick="togglePerPriceReferenceScan()" class="text-xs font-bold text-cyan-300 hover:text-cyan-200 flex items-center gap-1.5 transition">
+                        <i class="fa-regular fa-image"></i>
+                        <span id="per-price-ref-toggle-label">Show Reference Scan (1000010213_2.png)</span>
+                    </button>
+
+                    <div id="per-price-ref-panel" class="hidden w-full rounded-2xl bg-slate-900/90 border border-white/10 p-3 space-y-2 text-center">
+                        <div class="text-[10px] font-black uppercase tracking-wider text-cyan-300">
+                            Reference Scan (1000010213_2.png)
+                        </div>
+                        <div class="inline-block rounded-xl bg-white p-2 max-w-[175px] mx-auto">
+                            <img src="1000010213_2.png" alt="Reference uploaded QR scan 1000010213_2.png" class="w-full max-h-40 object-contain rounded-lg">
+                        </div>
+                    </div>
+
+                    <p id="per-price-uri-text" class="text-[10px] font-mono text-slate-400 text-center break-all px-1"></p>
+                </div>
+
+                <!-- Quick Add This Exact Price Item to Cart -->
+                <button type="button" onclick="addPerPriceModalItemToCart()" class="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-500 hover:brightness-110 text-white text-xs sm:text-sm font-black shadow-lg flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-cart-plus"></i>
+                    <span id="per-price-add-btn-label">Add This Exact Price Item to Cart</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- LOCATION MODAL (BAHADURGANJ DEFAULT; PURNIA & ARARIA EXCLUDED)       -->
+    <!-- ===================================================================== -->
+    <div id="location-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-panel rounded-3xl max-w-sm w-full p-5 space-y-4 border border-white/15">
+            <div class="flex items-center justify-between">
+                <h3 class="text-base font-black text-white flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot text-rose-400"></i>
+                    <span>Select Delivery Zone</span>
+                </h3>
+                <button type="button" onclick="closeLocationModal()" class="w-8 h-8 rounded-full bg-white/10 text-slate-300 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <p class="text-xs text-slate-400">Default delivery is set to Bahadurganj, Bihar.</p>
+            <div id="location-options-list" class="space-y-2"></div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- SLIDE-OVER CART DRAWER (h-dvh WITH LIFTED SAFE-AREA CHECKOUT BAR)    -->
+    <!-- ===================================================================== -->
+    <div id="cart-backdrop" onclick="closeCartDrawer()" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs"></div>
+    <aside id="cart-drawer" aria-label="Shopping Cart Drawer" class="hidden fixed top-0 right-0 z-50 w-full max-w-md h-dvh bg-slate-950 border-l border-white/15 shadow-2xl flex flex-col justify-between">
+        <!-- Drawer Header -->
+        <div class="px-4 py-3.5 bg-gradient-to-r from-rose-700 to-rose-600 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-2.5">
+                <i class="fa-solid fa-bag-shopping text-amber-300 text-lg"></i>
+                <div>
+                    <h2 class="text-base font-black text-white">MANNU PIZZA Cart</h2>
+                    <p id="cart-zone-subtitle" class="text-[11px] text-rose-100">Delivering to Bahadurganj, Bihar</p>
+                </div>
+            </div>
+            <button type="button" onclick="closeCartDrawer()" aria-label="Close cart" class="w-9 h-9 rounded-full bg-black/25 hover:bg-black/40 text-white flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Scrollable Cart Items + Coupon + Bill Breakdown -->
+        <div class="flex-1 overflow-y-auto px-4 py-3 space-y-3.5">
+            <div id="cart-items-container" class="space-y-2"></div>
+
+            <!-- Coupon Code Box (MANNU25 & PIZZA20 only) -->
+            <div class="rounded-2xl bg-white/5 border border-white/10 p-3 space-y-2">
+                <div class="flex items-center justify-between">
+                    <label for="coupon-code-input" class="text-xs font-extrabold text-amber-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-ticket"></i>
+                        <span>Apply Coupon Code</span>
+                    </label>
+                    <span class="text-[10px] text-slate-400">MANNU25 • PIZZA20</span>
+                </div>
+                <div class="flex gap-2">
+                    <input id="coupon-code-input" type="text" placeholder="Enter MANNU25 or PIZZA20" class="flex-1 bg-slate-900 border border-white/15 focus:border-amber-400 rounded-xl px-3 py-2 text-xs font-bold uppercase text-white placeholder:normal-case placeholder:text-slate-500 focus:outline-none">
+                    <button type="button" onclick="applyCouponCode()" class="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black transition">
+                        Apply
+                    </button>
+                </div>
+                <div id="coupon-feedback" class="text-[11px] font-semibold text-slate-400"></div>
+            </div>
+
+            <!-- Bill Details Breakdown (5% GST) -->
+            <div class="rounded-2xl bg-white/5 border border-white/10 p-3 space-y-1.5 text-xs">
+                <h3 class="font-black text-white text-sm mb-1">Bill Details</h3>
+                <div class="flex justify-between text-slate-300">
+                    <span>Item Subtotal</span>
+                    <span id="bill-subtotal" class="font-bold text-white">₹0</span>
+                </div>
+                <div class="flex justify-between text-slate-300">
+                    <span>Delivery Charges</span>
+                    <span class="font-extrabold text-emerald-400">FREE</span>
+                </div>
+                <div id="bill-discount-row" class="hidden justify-between text-emerald-300 font-bold">
+                    <span id="bill-discount-label">Discount</span>
+                    <span id="bill-discount-value">-₹0</span>
+                </div>
+                <div class="flex justify-between text-slate-300">
+                    <span>GST (5%)</span>
+                    <span id="bill-gst" class="font-bold text-white">₹0</span>
+                </div>
+                <div class="pt-2 border-t border-white/10 flex justify-between items-center text-sm font-black">
+                    <span class="text-white">Total Payable</span>
+                    <span id="bill-total" class="text-amber-300 text-base">₹0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Docked & Lifted Checkout Bar Above Bottom Safe Area -->
+        <div class="shrink-0 bg-slate-900/95 border-t border-white/15 px-4 pt-3 pb-[max(1.25rem,calc(env(safe-area-inset-bottom)+0.75rem))]">
+            <button id="cart-checkout-btn" type="button" onclick="startThreeStepCheckout()" disabled class="w-full py-3 px-4 rounded-2xl font-black text-sm text-slate-950 bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-amber-300 shadow-lg transition flex items-center justify-center gap-2">
+                <span>Proceed to Address &amp; Payment</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ===================================================================== -->
+    <!-- 3-STEP CHECKOUT MODAL (STEP 1 ADDRESS -> STEP 2 PAYMENT -> STEP 3 WA) -->
+    <!-- ===================================================================== -->
+    <div id="checkout-modal" class="hidden fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-panel rounded-t-3xl sm:rounded-3xl w-full max-w-lg max-h-[92dvh] flex flex-col border border-white/15 overflow-hidden">
+
+            <!-- Checkout Header & 3-Step Indicator -->
+            <div class="px-5 py-4 bg-slate-900/95 border-b border-white/10 space-y-3 shrink-0">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 id="checkout-modal-title" class="text-base sm:text-lg font-black text-white">Step 1: Delivery Address</h2>
+                        <p id="checkout-payable-badge" class="text-xs font-bold text-amber-300">Payable Total: ₹0</p>
+                    </div>
+                    <button type="button" onclick="closeCheckoutModal()" aria-label="Close checkout" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 flex items-center justify-center">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-[11px] font-black">
+                    <div id="step-pill-1" class="py-1.5 px-2 rounded-xl bg-amber-400 text-slate-950 text-center">1. Address</div>
+                    <div id="step-pill-2" class="py-1.5 px-2 rounded-xl bg-white/10 text-slate-400 text-center">2. Payment</div>
+                    <div id="step-pill-3" class="py-1.5 px-2 rounded-xl bg-white/10 text-slate-400 text-center">3. WhatsApp Proof</div>
+                </div>
+            </div>
+
+            <!-- Checkout Body -->
+            <div class="p-5 overflow-y-auto space-y-4">
+                <div id="checkout-error-banner" role="alert" class="hidden rounded-2xl px-3.5 py-2.5 text-xs font-bold bg-rose-950/75 border border-rose-400/50 text-rose-200"></div>
+
+                <!-- STEP 1: ADDRESS FORM (NO WHATSAPP TRIGGER YET) -->
+                <form id="checkout-step-1" onsubmit="submitStepOneAddress(event)" novalidate class="space-y-3.5">
+                    <div>
+                        <label for="cust-name" class="block text-xs font-bold text-slate-200 mb-1">Customer Full Name</label>
+                        <input id="cust-name" type="text" placeholder="Enter your full name" class="w-full bg-slate-950/80 border border-white/15 focus:border-amber-400 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label for="cust-phone" class="block text-xs font-bold text-slate-200 mb-1">10-Digit Mobile Number</label>
+                        <input id="cust-phone" type="tel" maxlength="10" placeholder="98XXXXXXXX" class="w-full bg-slate-950/80 border border-white/15 focus:border-amber-400 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label for="cust-address" class="block text-xs font-bold text-slate-200 mb-1">Delivery Address (Bahadurganj, Bihar)</label>
+                        <textarea id="cust-address" rows="3" placeholder="House/Ward No., Main Road / Landmark, Bahadurganj, Bihar" class="w-full bg-slate-950/80 border border-white/15 focus:border-amber-400 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">Near Main Chowk, Bahadurganj, Bihar</textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 px-4 rounded-2xl font-black text-sm text-slate-950 bg-amber-400 hover:bg-amber-300 transition flex items-center justify-center gap-2">
+                        <span>Continue to Payment</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </form>
+
+                <!-- STEP 2: PAYMENT VERIFICATION (SCANNABLE UPI QR CANVAS + MANAUWAR REZA + UTR GATE) -->
+                <div id="checkout-step-2" class="hidden space-y-4">
+                    <div class="rounded-2xl bg-slate-950/85 border border-white/12 p-4 space-y-3.5">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <div class="text-[11px] uppercase tracking-wider font-bold text-cyan-300">UPI Merchant / Receiver</div>
+                                <div class="text-sm font-black text-white">MANAUWAR REZA</div>
+                                <div class="text-xs font-mono text-amber-300">manauwa098765@nyes</div>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button type="button" onclick="copyUpiId()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-extrabold text-white flex items-center gap-1.5 transition">
+                                    <i class="fa-regular fa-copy"></i>
+                                    <span>Copy UPI ID</span>
+                                </button>
+                                <a id="upi-deep-link-btn" href="upi://pay?pa=manauwa098765@nyes&pn=MANAUWAR%20REZA&cu=INR&tn=MANNU%20PIZZA%20Order" class="px-3 py-1.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 text-xs font-black flex items-center gap-1.5 transition">
+                                    <i class="fa-solid fa-mobile-screen-button"></i>
+                                    <span>Open UPI App</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- High-Contrast Scannable UPI QR Code Canvas with Generous Quiet Zone -->
+                        <div class="flex flex-col items-center justify-center pt-1 space-y-3">
+                            <div class="inline-flex flex-col items-center rounded-2xl bg-white p-4 shadow-inner border border-slate-200">
+                                <canvas id="scannable-upi-qr-canvas" width="248" height="248" aria-label="Scannable UPI QR Code for MANAUWAR REZA" class="w-52 h-52 sm:w-56 sm:h-56 block"></canvas>
+                                <div class="mt-2 text-[11px] font-extrabold text-slate-900 tracking-wide">
+                                    MANAUWAR REZA • <span id="qr-amount-label" class="text-rose-700">₹0</span>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap items-center justify-center gap-2">
+                                <button type="button" onclick="downloadScannableQrPng()" class="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black flex items-center gap-2 shadow transition">
+                                    <i class="fa-solid fa-download"></i>
+                                    <span>Download QR Code (PNG)</span>
+                                </button>
+
+                                <button type="button" onclick="toggleReferenceQrPanel()" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-bold text-slate-200 flex items-center gap-1.5 transition">
+                                    <i class="fa-regular fa-image"></i>
+                                    <span id="ref-qr-toggle-btn-label">Reference / Uploaded Scan</span>
+                                </button>
+                            </div>
+
+                            <!-- Toggleable Reference / Uploaded Scan ('1000010213_2.png') -->
+                            <div id="ref-qr-panel" class="hidden w-full rounded-2xl bg-slate-900/90 border border-white/10 p-3 space-y-2 text-center">
+                                <div class="text-[10px] font-black uppercase tracking-wider text-cyan-300">
+                                    Reference / Uploaded Scan (1000010213_2.png)
+                                </div>
+                                <div class="inline-block rounded-xl bg-white p-2 max-w-[180px] mx-auto">
+                                    <img id="ref-uploaded-qr-img" src="1000010213_2.png" alt="Reference uploaded scan 1000010213_2.png" class="w-full max-h-44 object-contain rounded-lg">
+                                </div>
+                                <p class="text-[10px] text-slate-400">
+                                    Use the high-contrast QR code above or Open UPI App for scanner compatibility.
+                                </p>
+                            </div>
+
+                            <p id="upi-qr-intent-preview" class="text-[11px] font-mono text-cyan-200/90 text-center break-all px-2"></p>
+
+                            <p class="text-[11px] text-slate-300 text-center leading-relaxed px-1">
+                                Scan the QR code above with GPay, PhonePe, Paytm, or Navi (<span class="text-white font-bold">MANAUWAR REZA</span> • <span class="text-amber-300 font-bold">manauwa098765@nyes</span>) and enter your 6+ character UTR / transaction reference below.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="utr-input" class="block text-xs font-bold text-slate-200 mb-1">
+                            UTR / Payment Reference Number (min. 6 characters)
+                        </label>
+                        <input id="utr-input" type="text" placeholder="e.g. 429812345678 or TXN982145" class="w-full bg-slate-950/85 border border-white/15 focus:border-emerald-400 rounded-xl px-3.5 py-2.5 text-sm font-mono text-white focus:outline-none">
+                    </div>
+
+                    <div class="flex gap-2.5">
+                        <button type="button" onclick="goToCheckoutStep(1)" class="px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/15 text-xs font-black text-slate-200 transition">
+                            Back
+                        </button>
+                        <button id="verify-payment-btn" type="button" onclick="verifyPaymentAndUnlockStep3()" class="flex-1 py-3 px-4 rounded-2xl font-black text-sm text-slate-950 bg-emerald-400 hover:bg-emerald-300 transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-shield-check"></i>
+                            <span>Verify Payment &amp; Continue</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: POST-PAYMENT ORDER & WHATSAPP PROOF PORTAL -->
+                <div id="checkout-step-3" class="hidden space-y-4">
+                    <div class="rounded-2xl bg-emerald-950/50 border border-emerald-400/40 p-4 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-black text-emerald-300 uppercase">
+                                <i class="fa-solid fa-circle-check mr-1"></i> Payment Verified &amp; Order Created
+                            </span>
+                            <span id="step3-order-id" class="text-xs font-mono font-black text-white">#MP0000</span>
+                        </div>
+                        <p id="step3-summary-text" class="text-xs text-slate-200"></p>
+                        <p class="text-[11px] text-amber-300 font-bold">
+                            Screenshot Reminder: Attach your UPI payment screenshot in WhatsApp along with the pre-filled order &amp; Bahadurganj address message.
+                        </p>
+                    </div>
+
+                    <button type="button" onclick="openWhatsAppProofLink()" class="w-full py-3.5 px-4 rounded-2xl font-black text-sm text-slate-950 bg-emerald-400 hover:bg-emerald-300 shadow-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Send Order &amp; Payment Proof on WhatsApp (+918700475480)</span>
+                    </button>
+
+                    <button id="step3-open-tracker-btn" type="button" onclick="viewLiveTrackerAfterProof()" disabled class="w-full py-2.5 px-4 rounded-2xl font-black text-xs text-white bg-white/10 disabled:opacity-45 disabled:cursor-not-allowed hover:bg-white/20 border border-white/15 transition">
+                        Open 30-Minute Live Order Tracker (Unlocks After WhatsApp Click)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =====================================================================
+        // APPLICATION STATE & ALL 16 MENU ITEMS
+        // =====================================================================
+        const DELIVERY_ZONES = [
+            'Bahadurganj, Bihar',
+            'Main Chowk, Bahadurganj',
+            'Station Road, Bahadurganj',
+            'Kishanganj Road, Bahadurganj'
+        ];
+
+        const MENU_ITEMS = [
+            // 5 Veg Pizzas
+            {
+                id: 'veg-1',
+                name: 'Margherita',
+                category: 'Veg Pizzas',
+                isVeg: true,
+                theme: 'from-rose-600/35 via-amber-500/20 to-red-900/40',
+                accent: '#fb7185',
+                toppingIcon: 'fa-cheese',
+                ingredients: ['Classic Tomato Sauce', '100% Mozzarella Cheese', 'Italian Oregano', 'Hand-Tossed Crust'],
+                description: 'Rich tomato base loaded with gooey mozzarella and aromatic Italian herbs.',
+                prices: { Regular: 149, Medium: 279, Large: 429 }
+            },
+            {
+                id: 'veg-2',
+                name: 'Farm House',
+                category: 'Veg Pizzas',
+                isVeg: true,
+                theme: 'from-emerald-600/35 via-lime-500/20 to-green-950/40',
+                accent: '#4ade80',
+                toppingIcon: 'fa-leaf',
+                ingredients: ['Crisp Capsicum', 'Red Onion Rings', 'Fresh Tomatoes', 'Mozzarella Cheese'],
+                description: 'Garden-fresh capsicum, juicy tomatoes, and onions over melted mozzarella.',
+                prices: { Regular: 199, Medium: 349, Large: 519 }
+            },
+            {
+                id: 'veg-3',
+                name: 'Paneer Makhani',
+                category: 'Veg Pizzas',
+                isVeg: true,
+                theme: 'from-amber-500/35 via-orange-500/25 to-rose-900/40',
+                accent: '#fbbf24',
+                toppingIcon: 'fa-fire-flame-curved',
+                ingredients: ['Spiced Paneer Cubes', 'Makhani Gravy Base', 'Capsicum', 'Mozzarella Blend'],
+                description: 'Desi makhani richness with soft spiced paneer chunks and bell peppers.',
+                prices: { Regular: 229, Medium: 389, Large: 569 }
+            },
+            {
+                id: 'veg-4',
+                name: 'Veggie Paradise',
+                category: 'Veg Pizzas',
+                isVeg: true,
+                theme: 'from-yellow-500/35 via-emerald-500/20 to-amber-950/40',
+                accent: '#facc15',
+                toppingIcon: 'fa-seedling',
+                ingredients: ['Golden Sweet Corn', 'Black Olives', 'Crisp Capsicum', 'Mozzarella Cheese'],
+                description: 'Sweet corn kernels, briny black olives, and crunchy capsicum.',
+                prices: { Regular: 219, Medium: 369, Large: 549 }
+            },
+            {
+                id: 'veg-5',
+                name: 'Peppy Paneer',
+                category: 'Veg Pizzas',
+                isVeg: true,
+                theme: 'from-red-600/35 via-orange-500/25 to-amber-900/40',
+                accent: '#f97316',
+                toppingIcon: 'fa-pepper-hot',
+                ingredients: ['Chunky Paneer', 'Crisp Capsicum', 'Red Paprika', 'Mozzarella Cheese'],
+                description: 'Zesty red paprika and juicy paneer cubes for bold flavor lovers.',
+                prices: { Regular: 229, Medium: 389, Large: 569 }
+            },
+
+            // 4 Non-Veg Pizzas
+            {
+                id: 'nonveg-1',
+                name: 'Chicken Tikka',
+                category: 'Non-Veg Pizzas',
+                isVeg: false,
+                theme: 'from-rose-700/40 via-red-600/25 to-slate-900/50',
+                accent: '#f43f5e',
+                toppingIcon: 'fa-drumstick-bite',
+                ingredients: ['Tandoori Chicken Tikka', 'Onion', 'Capsicum', 'Mozzarella Cheese'],
+                description: 'Char-spiced chicken tikka chunks paired with onions and capsicum.',
+                prices: { Regular: 249, Medium: 419, Large: 619 }
+            },
+            {
+                id: 'nonveg-2',
+                name: 'Pepper Barbecue Chicken',
+                category: 'Non-Veg Pizzas',
+                isVeg: false,
+                theme: 'from-orange-700/40 via-rose-600/25 to-stone-950/50',
+                accent: '#fb923c',
+                toppingIcon: 'fa-fire',
+                ingredients: ['Smoky BBQ Chicken', 'Crushed Black Pepper', 'Cheese Blend', 'Spiced Crust'],
+                description: 'Tangy barbecue chicken tossed with freshly cracked black pepper.',
+                prices: { Regular: 259, Medium: 429, Large: 629 }
+            },
+            {
+                id: 'nonveg-3',
+                name: 'Chicken Sausage',
+                category: 'Non-Veg Pizzas',
+                isVeg: false,
+                theme: 'from-red-700/40 via-amber-600/25 to-zinc-950/50',
+                accent: '#ef4444',
+                toppingIcon: 'fa-bacon',
+                ingredients: ['Juicy Chicken Sausage Slices', 'Herbed Marinara', 'Mozzarella Cheese'],
+                description: 'Savory chicken sausage slices baked over melted mozzarella.',
+                prices: { Regular: 239, Medium: 399, Large: 589 }
+            },
+            {
+                id: 'nonveg-4',
+                name: 'Non-Veg Supreme',
+                category: 'Non-Veg Pizzas',
+                isVeg: false,
+                theme: 'from-fuchsia-700/35 via-rose-600/30 to-slate-950/50',
+                accent: '#e879f9',
+                toppingIcon: 'fa-crown',
+                ingredients: ['Chicken Tikka', 'BBQ Chicken', 'Chicken Sausage', 'Capsicum & Onion'],
+                description: 'Loaded triple-chicken feast with veggies and extra mozzarella.',
+                prices: { Regular: 299, Medium: 499, Large: 719 }
+            },
+
+            // 4 Sides
+            {
+                id: 'side-1',
+                name: 'Garlic Breadsticks',
+                category: 'Sides',
+                isVeg: true,
+                theme: 'from-amber-500/30 via-yellow-500/20 to-stone-900/40',
+                accent: '#fde047',
+                toppingIcon: 'fa-bread-slice',
+                ingredients: ['4 Baked Breadsticks', 'Roasted Garlic Butter', 'Oregano & Chili Flakes'],
+                description: 'Warm golden breadsticks brushed with garlic butter and herbs.',
+                prices: { Regular: 119 }
+            },
+            {
+                id: 'side-2',
+                name: 'Stuffed Garlic Bread',
+                category: 'Sides',
+                isVeg: true,
+                theme: 'from-lime-500/30 via-amber-500/20 to-emerald-950/40',
+                accent: '#a3e635',
+                toppingIcon: 'fa-utensils',
+                ingredients: ['Cheese & Corn Stuffing', 'Jalapeno Bits', 'Garlic Herb Crust'],
+                description: 'Crispy folded garlic bread stuffed with molten cheese, corn, and jalapenos.',
+                prices: { Regular: 159 }
+            },
+            {
+                id: 'side-3',
+                name: 'Chicken Wings',
+                category: 'Sides',
+                isVeg: false,
+                theme: 'from-rose-600/35 via-orange-500/25 to-red-950/40',
+                accent: '#fb7185',
+                toppingIcon: 'fa-drumstick-bite',
+                ingredients: ['4 Crispy Chicken Wings', 'Spicy Peri-Peri / BBQ Glaze', 'Herb Dusting'],
+                description: 'Juicy oven-roasted chicken wings coated in a bold savory glaze.',
+                prices: { Regular: 189 }
+            },
+            {
+                id: 'side-4',
+                name: 'Cheesy Dip',
+                category: 'Sides',
+                isVeg: true,
+                theme: 'from-yellow-400/30 via-amber-500/20 to-yellow-950/40',
+                accent: '#facc15',
+                toppingIcon: 'fa-droplet',
+                ingredients: ['Creamy Cheddar Cheese Blend', 'Mild Herb Seasoning', 'Serving Tub'],
+                description: 'Rich, velvety cheese dip crafted for breadsticks, wings, and pizza crusts.',
+                prices: { Regular: 45 }
+            },
+
+            // 3 Beverages & Desserts
+            {
+                id: 'bev-1',
+                name: 'Choco Lava Cake',
+                category: 'Beverages & Desserts',
+                isVeg: true,
+                theme: 'from-amber-700/35 via-rose-700/25 to-stone-950/50',
+                accent: '#d97706',
+                toppingIcon: 'fa-mug-hot',
+                ingredients: ['Dark Chocolate Cake Shell', 'Warm Gooey Fudge Core', 'Cocoa Finish'],
+                description: 'Warm chocolate cake with a rich, molten chocolate center.',
+                prices: { Regular: 99 }
+            },
+            {
+                id: 'bev-2',
+                name: 'Cold Drink 500ml',
+                category: 'Beverages & Desserts',
+                isVeg: true,
+                theme: 'from-cyan-500/30 via-sky-500/20 to-blue-950/40',
+                accent: '#38bdf8',
+                toppingIcon: 'fa-bottle-water',
+                ingredients: ['Chilled 500ml Fizzy Cola Bottle', 'Refreshing Carbonation'],
+                description: 'Ice-cold 500ml bottle to pair with hot slices and sides.',
+                prices: { Regular: 55 }
+            },
+            {
+                id: 'bev-3',
+                name: 'Brownie Fudge',
+                category: 'Beverages & Desserts',
+                isVeg: true,
+                theme: 'from-purple-600/30 via-amber-600/20 to-slate-950/50',
+                accent: '#c084fc',
+                toppingIcon: 'fa-cookie-bite',
+                ingredients: ['Dense Fudge Brownie', 'Rich Chocolate Drizzle', 'Soft Crumb'],
+                description: 'Decadent chocolate fudge brownie with a deep cocoa finish.',
+                prices: { Regular: 109 }
+            }
+        ];
+
+        const registeredAccounts = [
+            {
+                name: 'Mannu bhai',
+                email: 'mannu@example.com',
+                username: 'mannu_bhai',
+                password: 'Password123'
+            }
+        ];
+
+        const state = {
+            currentUser: null,
+            selectedCategory: 'All',
+            pureVegOnly: false,
+            activeStoreView: 'menu',
+            selectedLocation: 'Bahadurganj, Bihar',
+            selectedSizes: {},
+            cart: [],
+            appliedCoupon: null,
+            perPriceModalSelection: null,
+            checkoutStep: 1,
+            checkoutCustomer: {
+                name: '',
+                phone: '',
+                address: 'Near Main Chowk, Bahadurganj, Bihar'
+            },
+            paymentVerified: false,
+            orderCreated: false,
+            whatsappProofSent: false,
+            trackerUnlocked: false,
+            currentOrder: null,
+            countdownSeconds: 30 * 60,
+            countdownInterval: null
+        };
+
+        // Initialize default size selection for pizzas
+        MENU_ITEMS.forEach(item => {
+            state.selectedSizes[item.id] = item.prices.Medium ? 'Medium' : 'Regular';
+        });
+
+        // =====================================================================
+        // TOAST & PASSWORD HELPERS
+        // =====================================================================
+        let toastTimer = null;
+        function showToast(message, isError = false) {
+            const banner = document.getElementById('toast-banner');
+            const icon = document.getElementById('toast-icon');
+            const text = document.getElementById('toast-message');
+            if (!banner || !icon || !text) return;
+
+            text.textContent = message;
+            icon.className = isError
+                ? 'fa-solid fa-circle-exclamation text-rose-400 text-sm shrink-0'
+                : 'fa-solid fa-circle-check text-emerald-400 text-sm shrink-0';
+            banner.classList.remove('hidden');
+
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                banner.classList.add('hidden');
+            }, 2800);
+        }
+
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!input || !icon) return;
+            const makeVisible = input.type === 'password';
+            input.type = makeVisible ? 'text' : 'password';
+            icon.className = makeVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+        }
+
+        // =====================================================================
+        // STAGE 1: LOGIN & CREATE ACCOUNT GATEWAY LOGIC
+        // =====================================================================
+        function switchAuthTab(tab) {
+            const isLogin = tab === 'login';
+            const loginBtn = document.getElementById('tab-login-btn');
+            const regBtn = document.getElementById('tab-register-btn');
+            const loginForm = document.getElementById('login-form');
+            const regForm = document.getElementById('register-form');
+
+            loginBtn.setAttribute('aria-selected', String(isLogin));
+            regBtn.setAttribute('aria-selected', String(!isLogin));
+
+            loginBtn.className = isLogin
+                ? 'h-9 rounded-xl text-xs sm:text-sm font-extrabold text-white bg-gradient-to-r from-rose-600 via-purple-600 to-cyan-600 shadow transition flex items-center justify-center gap-1.5'
+                : 'h-9 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5';
+
+            regBtn.className = !isLogin
+                ? 'h-9 rounded-xl text-xs sm:text-sm font-extrabold text-white bg-gradient-to-r from-cyan-500 via-purple-600 to-rose-600 shadow transition flex items-center justify-center gap-1.5'
+                : 'h-9 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5';
+
+            loginForm.classList.toggle('hidden', !isLogin);
+            regForm.classList.toggle('hidden', isLogin);
+            hideAuthFeedback();
+        }
+
+        function showAuthFeedback(msg, type = 'error') {
+            const box = document.getElementById('auth-feedback');
+            const ok = type === 'success';
+            box.className = `rounded-2xl px-3.5 py-2.5 text-xs font-semibold border flex items-start gap-2.5 ${
+                ok
+                    ? 'bg-emerald-950/65 border-emerald-400/50 text-emerald-200'
+                    : 'bg-rose-950/65 border-rose-400/50 text-rose-200'
+            }`;
+            box.innerHTML = `<i class="fa-solid ${ok ? 'fa-circle-check text-emerald-400' : 'fa-circle-exclamation text-rose-400'} mt-0.5 shrink-0"></i><span>${msg}</span>`;
+            box.classList.remove('hidden');
+        }
+
+        function hideAuthFeedback() {
+            const box = document.getElementById('auth-feedback');
+            if (box) {
+                box.classList.add('hidden');
+                box.textContent = '';
+            }
+        }
+
+        function fillDemoCredentials() {
+            document.getElementById('login-identifier').value = 'mannu@example.com';
+            document.getElementById('login-password').value = 'Password123';
+            showAuthFeedback('Demo credentials loaded (mannu@example.com / Password123). Click Login to Continue.', 'success');
+        }
+
+        function activateSessionAndShowContinue(userObj, feedbackMsg) {
+            state.currentUser = userObj;
+            document.getElementById('auth-session-badge').textContent = userObj.name;
+            document.getElementById('post-auth-continue-box').classList.remove('hidden');
+            showAuthFeedback(feedbackMsg, 'success');
+            syncStoreUserHeader();
+        }
+
+        function handleLoginSubmit(event) {
+            event.preventDefault();
+            try {
+                const identifier = document.getElementById('login-identifier').value.trim();
+                const password = document.getElementById('login-password').value;
+
+                if (!identifier) {
+                    showAuthFeedback('Please enter your email or username.', 'error');
+                    return;
+                }
+                if (!password) {
+                    showAuthFeedback('Please enter your password.', 'error');
+                    return;
+                }
+
+                const norm = identifier.toLowerCase();
+                const found = registeredAccounts.find(acc =>
+                    acc.email.toLowerCase() === norm || acc.username.toLowerCase() === norm
+                );
+
+                if (found && found.password !== password) {
+                    showAuthFeedback('Incorrect password for this account. Try Password123 or check again.', 'error');
+                    return;
+                }
+
+                const name = found
+                    ? found.name
+                    : identifier.includes('@')
+                    ? identifier.split('@')[0]
+                    : identifier;
+
+                activateSessionAndShowContinue(
+                    {
+                        name,
+                        contact: found ? found.email : identifier,
+                        type: 'Logged In'
+                    },
+                    `Welcome back, ${name}! Click "Continue to MANNU PIZZA" below to start ordering.`
+                );
+            } catch (e) {
+                showAuthFeedback('Unable to process login right now.', 'error');
+            }
+        }
+
+        function handleRegisterSubmit(event) {
+            event.preventDefault();
+            try {
+                const name = document.getElementById('reg-name').value.trim();
+                const email = document.getElementById('reg-email').value.trim();
+                const password = document.getElementById('reg-password').value;
+                const confirm = document.getElementById('reg-confirm').value;
+
+                if (name.length < 2) {
+                    showAuthFeedback('Please enter your full name (at least 2 characters).', 'error');
+                    return;
+                }
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    showAuthFeedback('Please enter a valid email address.', 'error');
+                    return;
+                }
+                if (password.length < 6) {
+                    showAuthFeedback('Password must be at least 6 characters long.', 'error');
+                    return;
+                }
+                if (password !== confirm) {
+                    showAuthFeedback('Password and Confirm Password do not match.', 'error');
+                    return;
+                }
+
+                const exists = registeredAccounts.some(a => a.email.toLowerCase() === email.toLowerCase());
+                if (exists) {
+                    showAuthFeedback('An account with this email already exists. Switch to Login tab.', 'error');
+                    return;
+                }
+
+                const created = {
+                    name,
+                    email,
+                    username: email.split('@')[0],
+                    password
+                };
+                registeredAccounts.push(created);
+                document.getElementById('register-form').reset();
+
+                activateSessionAndShowContinue(
+                    {
+                        name: created.name,
+                        contact: created.email,
+                        type: 'New Account'
+                    },
+                    `Account created for ${created.name}! Tap "Continue to MANNU PIZZA" below.`
+                );
+            } catch (e) {
+                showAuthFeedback('Could not create account right now.', 'error');
+            }
+        }
+
+        function enterMannuPizzaStore() {
+            if (!state.currentUser) {
+                state.currentUser = { name: 'Mannu Customer', contact: 'Bahadurganj, Bihar', type: 'Guest' };
+            }
+            document.getElementById('gateway-stage').classList.add('hidden');
+            document.getElementById('store-stage').classList.remove('hidden');
+            syncStoreUserHeader();
+            renderStorefront();
+            renderPriceList();
+            showToast(`Welcome to MANNU PIZZA • ${state.selectedLocation}`);
+        }
+
+        function handleLogoutToGateway() {
+            state.currentUser = null;
+            document.getElementById('post-auth-continue-box').classList.add('hidden');
+            document.getElementById('login-password').value = '';
+            switchAuthTab('login');
+            showAuthFeedback('Signed out. You can log in or create another account.', 'success');
+        }
+
+        function backToLoginGateway() {
+            closeCartDrawer();
+            closeCheckoutModal();
+            closePerPriceQrModal();
+            document.getElementById('store-stage').classList.add('hidden');
+            document.getElementById('gateway-stage').classList.remove('hidden');
+            if (state.currentUser) {
+                document.getElementById('auth-session-badge').textContent = state.currentUser.name;
+                document.getElementById('post-auth-continue-box').classList.remove('hidden');
+            }
+        }
+
+        function syncStoreUserHeader() {
+            const pill = document.getElementById('active-user-pill');
+            if (!pill) return;
+            pill.textContent = state.currentUser
+                ? `${state.currentUser.name} • Bahadurganj, Bihar`
+                : 'Bahadurganj, Bihar Delivery';
+        }
+
+        // =====================================================================
+        // LOCATION SWITCHER (BAHADURGANJ DEFAULT; PURNIA & ARARIA EXCLUDED)
+        // =====================================================================
+        function openLocationModal() {
+            const list = document.getElementById('location-options-list');
+            list.innerHTML = DELIVERY_ZONES.map(zone => {
+                const active = zone === state.selectedLocation;
+                return `
+                    <button type="button" onclick="selectDeliveryZone('${zone.replace(/'/g, "\\'")}')" class="w-full px-3.5 py-2.5 rounded-xl text-left text-xs font-bold flex items-center justify-between border transition ${
+                        active
+                            ? 'bg-rose-600/25 border-rose-400 text-white'
+                            : 'bg-white/5 hover:bg-white/10 border-white/10 text-slate-200'
+                    }">
+                        <span><i class="fa-solid fa-location-dot mr-2 text-rose-400"></i>${zone}</span>
+                        ${active ? '<i class="fa-solid fa-check text-emerald-400"></i>' : ''}
+                    </button>
+                `;
+            }).join('');
+            document.getElementById('location-modal').classList.remove('hidden');
+        }
+
+        function closeLocationModal() {
+            document.getElementById('location-modal').classList.add('hidden');
+        }
+
+        function selectDeliveryZone(zone) {
+            state.selectedLocation = zone;
+            document.getElementById('current-location-label').textContent = zone;
+            document.getElementById('cart-zone-subtitle').textContent = `Delivering to ${zone}`;
+            const addrField = document.getElementById('cust-address');
+            if (addrField && (!addrField.value.trim() || addrField.value.includes('Bahadurganj'))) {
+                addrField.value = `Near Main Chowk, ${zone}`;
+            }
+            closeLocationModal();
+            showToast(`Delivery location set to ${zone}`);
+        }
+
+        // =====================================================================
+        // STOREFRONT VIEW SWITCHING & FILTERING
+        // =====================================================================
+        function switchStoreView(viewName) {
+            state.activeStoreView = viewName;
+
+            document.getElementById('view-menu').classList.toggle('hidden', viewName !== 'menu');
+            document.getElementById('view-pricelist').classList.toggle('hidden', viewName !== 'pricelist');
+            document.getElementById('view-offers').classList.toggle('hidden', viewName !== 'offers');
+            document.getElementById('view-track').classList.toggle('hidden', viewName !== 'track');
+
+            const showFilterBar = viewName === 'menu' || viewName === 'pricelist';
+            document.getElementById('store-filter-bar').classList.toggle('hidden', !showFilterBar);
+
+            const navIds = ['menu', 'pricelist', 'offers', 'track'];
+            navIds.forEach(id => {
+                const btn = document.getElementById(`nav-${id}-btn`);
+                if (btn) {
+                    btn.className = id === viewName
+                        ? 'px-3.5 py-1.5 rounded-lg text-xs font-extrabold bg-rose-600 text-white transition'
+                        : 'px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:text-white transition';
+                }
+                const mobBtn = document.getElementById(`mob-nav-${id}`);
+                if (mobBtn) {
+                    mobBtn.className = id === viewName
+                        ? 'py-2.5 text-[11px] font-black text-rose-400 flex flex-col items-center gap-1'
+                        : 'py-2.5 text-[11px] font-bold text-slate-400 flex flex-col items-center gap-1';
+                }
+            });
+
+            if (viewName === 'pricelist') {
+                renderPriceList();
+            } else if (viewName === 'track') {
+                syncTrackerView();
+            }
+        }
+
+        function selectCategory(cat) {
+            state.selectedCategory = cat;
+            document.querySelectorAll('.cat-pill').forEach(pill => {
+                const isSelected = pill.getAttribute('data-cat') === cat;
+                pill.className = isSelected
+                    ? 'cat-pill px-3.5 py-1.5 rounded-full text-xs font-black bg-amber-400 text-slate-950 shrink-0 transition'
+                    : 'cat-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 shrink-0 transition';
+            });
+            renderStorefront();
+            if (state.activeStoreView === 'pricelist') {
+                renderPriceList();
+            }
+        }
+
+        function togglePureVeg() {
+            state.pureVegOnly = !state.pureVegOnly;
+            const btn = document.getElementById('pure-veg-toggle');
+            const dot = document.getElementById('pure-veg-dot');
+            btn.setAttribute('aria-pressed', String(state.pureVegOnly));
+            dot.classList.toggle('opacity-30', !state.pureVegOnly);
+            dot.classList.toggle('opacity-100', state.pureVegOnly);
+            btn.className = state.pureVegOnly
+                ? 'px-3.5 py-2 rounded-xl bg-emerald-500/20 border border-emerald-400 text-xs font-black text-emerald-300 flex items-center gap-2 transition shrink-0'
+                : 'px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/12 text-xs font-extrabold text-slate-200 flex items-center gap-2 transition shrink-0';
+            renderStorefront();
+            if (state.activeStoreView === 'pricelist') {
+                renderPriceList();
+            }
+        }
+
+        function clearSearchInput() {
+            const input = document.getElementById('menu-search-input');
+            input.value = '';
+            document.getElementById('clear-search-btn').classList.add('hidden');
+            renderStorefront();
+        }
+
+        function getFilteredItems() {
+            const q = (document.getElementById('menu-search-input')?.value || '').trim().toLowerCase();
+            const clearBtn = document.getElementById('clear-search-btn');
+            if (clearBtn) {
+                clearBtn.classList.toggle('hidden', q.length === 0);
+            }
+
+            return MENU_ITEMS.filter(item => {
+                if (state.pureVegOnly && !item.isVeg) return false;
+                if (state.selectedCategory !== 'All' && item.category !== state.selectedCategory) return false;
+                if (q) {
+                    const haystack = `${item.name} ${item.category} ${item.description} ${item.ingredients.join(' ')}`.toLowerCase();
+                    if (!haystack.includes(q)) return false;
+                }
+                return true;
+            });
+        }
+
+        function selectItemSize(itemId, sizeName) {
+            state.selectedSizes[itemId] = sizeName;
+            renderStorefront();
+        }
+
+        // Custom pizza/item SVG visual block placed above ingredient & price sections
+        function buildCustomItemArtwork(item) {
+            const isPizza = item.category.includes('Pizza');
+            const crustColor = isPizza ? '#eab308' : '#f59e0b';
+            return `
+                <div class="relative w-full h-32 rounded-2xl bg-gradient-to-br ${item.theme} border border-white/10 overflow-hidden flex items-center justify-between px-4">
+                    <div class="space-y-1 z-10 max-w-[62%]">
+                        <span class="inline-block px-2 py-0.5 rounded-md bg-black/40 text-[10px] font-black uppercase tracking-wider text-amber-300">
+                            ${item.category}
+                        </span>
+                        <div class="text-xs font-bold text-white/90 line-clamp-2">${item.description}</div>
+                    </div>
+                    <svg viewBox="0 0 110 110" class="w-24 h-24 shrink-0 drop-shadow-lg" role="img" aria-label="${item.name} visual">
+                        <circle cx="55" cy="55" r="46" fill="${crustColor}" fill-opacity="0.25" stroke="${item.accent}" stroke-width="2.5"/>
+                        <circle cx="55" cy="55" r="36" fill="#0f172a" fill-opacity="0.72"/>
+                        <circle cx="43" cy="44" r="7" fill="${item.accent}" fill-opacity="0.85"/>
+                        <circle cx="67" cy="42" r="6" fill="#facc15" fill-opacity="0.9"/>
+                        <circle cx="56" cy="64" r="8" fill="#4ade80" fill-opacity="0.8"/>
+                        <circle cx="39" cy="67" r="5" fill="#fb923c" fill-opacity="0.9"/>
+                        <circle cx="70" cy="67" r="5.5" fill="#f43f5e" fill-opacity="0.85"/>
+                    </svg>
+                </div>
+            `;
+        }
+
+        // Ingredient / topping details ('Isme kya-kya dalega') placed directly above every price section
+        function buildIngredientsBox(item) {
+            const chips = item.ingredients
+                .map(ing => `<span class="px-2 py-0.5 rounded-full bg-white/8 border border-white/10 text-[10px] font-semibold text-slate-200">${ing}</span>`)
+                .join('');
+            return `
+                <div class="rounded-xl bg-slate-950/75 border border-white/10 p-2.5 space-y-1.5">
+                    <div class="text-[10px] font-black uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                        <i class="fa-solid ${item.toppingIcon}"></i>
+                        <span>Isme kya-kya dalega (Ingredients &amp; Toppings):</span>
+                    </div>
+                    <div class="flex flex-wrap gap-1">${chips}</div>
+                </div>
+            `;
+        }
+
+        function renderStorefront() {
+            const grid = document.getElementById('menu-cards-grid');
+            const summary = document.getElementById('menu-results-summary');
+            if (!grid) return;
+
+            const filtered = getFilteredItems();
+            if (summary) {
+                summary.textContent = `Showing ${filtered.length} of ${MENU_ITEMS.length} items${state.pureVegOnly ? ' • Pure Veg Only' : ''} • Tap any ₹ price for exact QR`;
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full glass-panel rounded-3xl p-8 text-center space-y-3">
+                        <i class="fa-solid fa-pizza-slice text-3xl text-slate-500"></i>
+                        <p class="text-sm font-bold text-slate-300">No items matched your search or filter.</p>
+                        <button type="button" onclick="resetMenuFilters()" class="px-4 py-2 rounded-xl bg-amber-400 text-slate-950 text-xs font-black">
+                            Reset Filters
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(item => {
+                const isPizza = Boolean(item.prices.Medium);
+                const selectedSize = state.selectedSizes[item.id] || 'Regular';
+                const activePrice = item.prices[selectedSize] || item.prices.Regular;
+
+                const vegBadge = item.isVeg
+                    ? `<span class="w-4 h-4 rounded border-2 border-emerald-400 flex items-center justify-center shrink-0" title="Veg"><span class="w-2 h-2 rounded-full bg-emerald-400"></span></span>`
+                    : `<span class="w-4 h-4 rounded border-2 border-rose-500 flex items-center justify-center shrink-0" title="Non-Veg"><span class="w-2 h-2 rounded-full bg-rose-500"></span></span>`;
+
+                const sizeSelectorHtml = isPizza ? `
+                    <div class="space-y-1.5">
+                        <div class="grid grid-cols-3 gap-1.5 text-[11px] font-extrabold">
+                            ${['Regular', 'Medium', 'Large'].map(sz => {
+                                const isSel = selectedSize === sz;
+                                const szPrice = item.prices[sz];
+                                return `
+                                    <div class="rounded-xl border text-center overflow-hidden transition ${
+                                        isSel
+                                            ? 'bg-amber-400/20 border-amber-400 text-amber-300'
+                                            : 'bg-white/5 border-white/10 text-slate-300'
+                                    }">
+                                        <button type="button" onclick="selectItemSize('${item.id}', '${sz}')" class="w-full pt-1.5 px-2 text-center hover:text-white transition">
+                                            ${sz}
+                                        </button>
+                                        <button type="button" onclick="openPerPriceQrModal('${item.id}', '${sz}', ${szPrice})" title="Open ₹${szPrice} UPI QR code" class="w-full pb-1.5 px-2 text-[11px] font-black text-white hover:text-amber-300 underline decoration-amber-400/60 underline-offset-2 transition">
+                                            ₹${szPrice} QR
+                                        </button>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                ` : `
+                    <div class="flex items-center justify-between text-xs text-slate-400 font-semibold">
+                        <span>Single Serving • Freshly Prepared</span>
+                        <button type="button" onclick="openPerPriceQrModal('${item.id}', 'Regular', ${item.prices.Regular})" class="text-cyan-300 hover:text-cyan-200 font-extrabold underline underline-offset-2">
+                            ₹${item.prices.Regular} UPI QR
+                        </button>
+                    </div>
+                `;
+
+                return `
+                    <article class="glass-panel rounded-3xl p-4 flex flex-col justify-between gap-3.5 border border-white/12 hover:border-amber-400/35 transition">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between gap-2">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    ${vegBadge}
+                                    <h3 class="text-base font-black text-white truncate">${item.name}</h3>
+                                </div>
+                                <span class="text-[11px] font-bold text-slate-400 shrink-0">${item.category}</span>
+                            </div>
+
+                            ${buildCustomItemArtwork(item)}
+
+                            <!-- Ingredient Details Directly Above Price Section -->
+                            ${buildIngredientsBox(item)}
+                        </div>
+
+                        <!-- Price Section & Add Button -->
+                        <div class="pt-2 border-t border-white/10 space-y-2.5">
+                            ${sizeSelectorHtml}
+
+                            <div class="flex items-center justify-between gap-2 pt-0.5">
+                                <button type="button" onclick="openPerPriceQrModal('${item.id}', '${selectedSize}', ${activePrice})" title="Tap to view exact ₹${activePrice} QR code" class="text-left group">
+                                    <span class="text-[11px] text-slate-400 group-hover:text-cyan-300 block transition">${selectedSize} • Tap for QR</span>
+                                    <span class="text-lg font-black text-amber-300 group-hover:text-amber-200 underline decoration-dotted underline-offset-4">₹${activePrice}</span>
+                                </button>
+                                <button type="button" onclick="addItemToCart('${item.id}', '${selectedSize}')" class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-500 hover:brightness-110 active:scale-[0.98] text-xs font-black text-white shadow flex items-center gap-1.5 transition">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>Add to Cart</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function resetMenuFilters() {
+            state.pureVegOnly = false;
+            state.selectedCategory = 'All';
+            const dot = document.getElementById('pure-veg-dot');
+            if (dot) dot.classList.add('opacity-30');
+            const vegBtn = document.getElementById('pure-veg-toggle');
+            if (vegBtn) {
+                vegBtn.setAttribute('aria-pressed', 'false');
+                vegBtn.className = 'px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/12 text-xs font-extrabold text-slate-200 flex items-center gap-2 transition shrink-0';
+            }
+            document.querySelectorAll('.cat-pill').forEach(pill => {
+                const isAll = pill.getAttribute('data-cat') === 'All';
+                pill.className = isAll
+                    ? 'cat-pill px-3.5 py-1.5 rounded-full text-xs font-black bg-amber-400 text-slate-950 shrink-0 transition'
+                    : 'cat-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 shrink-0 transition';
+            });
+            const searchInput = document.getElementById('menu-search-input');
+            if (searchInput) searchInput.value = '';
+            document.getElementById('clear-search-btn')?.classList.add('hidden');
+            renderStorefront();
+            renderPriceList();
+        }
+
+        // =====================================================================
+        // FULL PRICE LIST RENDERER (CLICKABLE PRICES FOR PER-PRICE QR + ADD)
+        // =====================================================================
+        function renderPriceList() {
+            const container = document.getElementById('pricelist-container');
+            if (!container) return;
+
+            const filtered = getFilteredItems();
+            const categories = ['Veg Pizzas', 'Non-Veg Pizzas', 'Sides', 'Beverages & Desserts'];
+
+            const sectionsHtml = categories.map(cat => {
+                const itemsInCat = filtered.filter(i => i.category === cat);
+                if (itemsInCat.length === 0) return '';
+
+                const isPizzaCat = cat.includes('Pizza');
+                return `
+                    <div class="glass-panel rounded-3xl p-4 sm:p-5 border border-white/12 space-y-3">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-2.5">
+                            <h3 class="text-base sm:text-lg font-black text-amber-300">${cat}</h3>
+                            <span class="text-xs font-bold text-slate-400">${itemsInCat.length} items</span>
+                        </div>
+
+                        <div class="divide-y divide-white/10">
+                            ${itemsInCat.map(item => `
+                                <div class="py-3.5 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                                    <div class="space-y-2 lg:max-w-xl">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-3.5 h-3.5 rounded border ${item.isVeg ? 'border-emerald-400' : 'border-rose-500'} flex items-center justify-center">
+                                                <span class="w-1.5 h-1.5 rounded-full ${item.isVeg ? 'bg-emerald-400' : 'bg-rose-500'}"></span>
+                                            </span>
+                                            <span class="text-sm sm:text-base font-black text-white">${item.name}</span>
+                                        </div>
+                                        ${buildCustomItemArtwork(item)}
+                                        ${buildIngredientsBox(item)}
+                                    </div>
+
+                                    <div class="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-2 shrink-0">
+                                        ${isPizzaCat ? `
+                                            <div class="flex flex-wrap items-center gap-1.5">
+                                                <button type="button" onclick="openPerPriceQrModal('${item.id}', 'Regular', ${item.prices.Regular})" class="px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/35 text-xs font-black text-cyan-200 transition" title="Open ₹${item.prices.Regular} QR">
+                                                    Reg ₹${item.prices.Regular} QR
+                                                </button>
+                                                <button type="button" onclick="openPerPriceQrModal('${item.id}', 'Medium', ${item.prices.Medium})" class="px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/35 text-xs font-black text-cyan-200 transition" title="Open ₹${item.prices.Medium} QR">
+                                                    Med ₹${item.prices.Medium} QR
+                                                </button>
+                                                <button type="button" onclick="openPerPriceQrModal('${item.id}', 'Large', ${item.prices.Large})" class="px-2.5 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/35 text-xs font-black text-cyan-200 transition" title="Open ₹${item.prices.Large} QR">
+                                                    Lrg ₹${item.prices.Large} QR
+                                                </button>
+                                            </div>
+                                            <div class="flex flex-wrap items-center gap-1.5">
+                                                <button type="button" onclick="addItemToCart('${item.id}', 'Regular')" class="px-3 py-1.5 rounded-xl bg-white/8 hover:bg-amber-400 hover:text-slate-950 border border-white/12 text-xs font-black text-white transition">
+                                                    Regular ₹${item.prices.Regular} +
+                                                </button>
+                                                <button type="button" onclick="addItemToCart('${item.id}', 'Medium')" class="px-3 py-1.5 rounded-xl bg-white/8 hover:bg-amber-400 hover:text-slate-950 border border-white/12 text-xs font-black text-white transition">
+                                                    Medium ₹${item.prices.Medium} +
+                                                </button>
+                                                <button type="button" onclick="addItemToCart('${item.id}', 'Large')" class="px-3 py-1.5 rounded-xl bg-white/8 hover:bg-amber-400 hover:text-slate-950 border border-white/12 text-xs font-black text-white transition">
+                                                    Large ₹${item.prices.Large} +
+                                                </button>
+                                            </div>
+                                        ` : `
+                                            <div class="flex flex-wrap items-center gap-2">
+                                                <button type="button" onclick="openPerPriceQrModal('${item.id}', 'Regular', ${item.prices.Regular})" class="px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/35 text-xs font-black text-cyan-200 transition">
+                                                    ₹${item.prices.Regular} UPI QR
+                                                </button>
+                                                <button type="button" onclick="addItemToCart('${item.id}', 'Regular')" class="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black transition">
+                                                    ₹${item.prices.Regular} • Add +
+                                                </button>
+                                            </div>
+                                        `}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = sectionsHtml || `
+                <div class="glass-panel rounded-3xl p-8 text-center space-y-3">
+                    <p class="text-sm font-bold text-slate-300">No price list items match the active filter.</p>
+                    <button type="button" onclick="resetMenuFilters()" class="px-4 py-2 rounded-xl bg-amber-400 text-slate-950 text-xs font-black">
+                        Show All Items
+                    </button>
+                </div>
+            `;
+        }
+
+        // =====================================================================
+        // CART, PROMO CODES (MANNU25 & PIZZA20 ONLY) & 5% GST BILL ENGINE
+        // =====================================================================
+        function addItemToCart(itemId, size) {
+            const item = MENU_ITEMS.find(m => m.id === itemId);
+            if (!item) return;
+            const unitPrice = item.prices[size] || item.prices.Regular;
+
+            const existing = state.cart.find(c => c.id === itemId && c.size === size);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                state.cart.push({
+                    id: item.id,
+                    name: item.name,
+                    size,
+                    unitPrice,
+                    qty: 1,
+                    isVeg: item.isVeg
+                });
+            }
+
+            // Reset order creation & proof flags when adding items for a new order
+            state.paymentVerified = false;
+            state.orderCreated = false;
+            state.whatsappProofSent = false;
+            state.trackerUnlocked = false;
+            syncTrackerView();
+
+            updateCartUI();
+            showToast(`Added ${item.name} (${size}) • ₹${unitPrice}`);
+        }
+
+        function updateCartQty(index, delta) {
+            const entry = state.cart[index];
+            if (!entry) return;
+            entry.qty += delta;
+            if (entry.qty <= 0) {
+                state.cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function computeBillTotals() {
+            const subtotal = state.cart.reduce((sum, item) => sum + (item.unitPrice * item.qty), 0);
+            let discount = 0;
+            let couponNote = '';
+
+            if (state.appliedCoupon) {
+                const code = state.appliedCoupon.code;
+                if (code === 'MANNU25') {
+                    if (subtotal >= 249) {
+                        discount = 25;
+                        couponNote = 'MANNU25 applied: Flat ₹25 off!';
+                    } else {
+                        couponNote = 'MANNU25 requires minimum order of ₹249.';
+                    }
+                } else if (code === 'PIZZA20') {
+                    if (subtotal >= 399) {
+                        discount = Math.round(subtotal * 0.20);
+                        couponNote = 'PIZZA20 applied: 20% discount!';
+                    } else {
+                        couponNote = 'PIZZA20 requires minimum order of ₹399.';
+                    }
+                }
+            }
+
+            const discountedSubtotal = Math.max(0, subtotal - discount);
+            const gst = Math.round(discountedSubtotal * 0.05);
+            const totalPayable = discountedSubtotal + gst;
+
+            return { subtotal, discount, gst, totalPayable, couponNote };
+        }
+
+        function applyCouponCode() {
+            const input = document.getElementById('coupon-code-input');
+            const feedback = document.getElementById('coupon-feedback');
+            const raw = (input?.value || '').trim().toUpperCase();
+
+            if (!raw) {
+                state.appliedCoupon = null;
+                feedback.className = 'text-[11px] font-semibold text-rose-300';
+                feedback.textContent = 'Enter MANNU25 or PIZZA20.';
+                updateCartUI();
+                return;
+            }
+
+            if (raw !== 'MANNU25' && raw !== 'PIZZA20') {
+                state.appliedCoupon = null;
+                feedback.className = 'text-[11px] font-semibold text-rose-300';
+                feedback.textContent = 'Invalid coupon. Try MANNU25 (₹25 off ₹249+) or PIZZA20 (20% off ₹399+).';
+                updateCartUI();
+                return;
+            }
+
+            state.appliedCoupon = { code: raw };
+            updateCartUI();
+        }
+
+        function copyAndApplyCoupon(code) {
+            const input = document.getElementById('coupon-code-input');
+            if (input) input.value = code;
+            state.appliedCoupon = { code };
+            updateCartUI();
+            openCartDrawer();
+            showToast(`${code} selected in cart`);
+        }
+
+        function updateCartUI() {
+            const totalQty = state.cart.reduce((sum, i) => sum + i.qty, 0);
+            const countEl = document.getElementById('header-cart-count');
+            if (countEl) countEl.textContent = String(totalQty);
+
+            const itemsContainer = document.getElementById('cart-items-container');
+            const checkoutBtn = document.getElementById('cart-checkout-btn');
+            const feedbackEl = document.getElementById('coupon-feedback');
+
+            if (state.cart.length === 0) {
+                itemsContainer.innerHTML = `
+                    <div class="rounded-2xl bg-white/5 border border-white/10 p-6 text-center space-y-2">
+                        <i class="fa-solid fa-bag-shopping text-2xl text-slate-500"></i>
+                        <p class="text-xs font-bold text-slate-300">Your MANNU PIZZA cart is empty.</p>
+                        <p class="text-[11px] text-slate-400">Add a pizza, side, or beverage to begin checkout.</p>
+                    </div>
+                `;
+                checkoutBtn.disabled = true;
+            } else {
+                itemsContainer.innerHTML = state.cart.map((item, idx) => `
+                    <div class="rounded-2xl bg-white/5 border border-white/10 p-3 flex items-center justify-between gap-2.5">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded-xs border ${item.isVeg ? 'border-emerald-400' : 'border-rose-500'} flex items-center justify-center shrink-0">
+                                    <span class="w-1.5 h-1.5 rounded-full ${item.isVeg ? 'bg-emerald-400' : 'bg-rose-500'}"></span>
+                                </span>
+                                <span class="text-xs sm:text-sm font-black text-white truncate">${item.name}</span>
+                            </div>
+                            <div class="text-[11px] text-slate-400">${item.size} • ₹${item.unitPrice} each</div>
+                            <div class="text-xs font-extrabold text-amber-300 mt-0.5">₹${item.unitPrice * item.qty}</div>
+                        </div>
+
+                        <div class="flex items-center gap-2 bg-slate-900 border border-white/15 rounded-xl px-2 py-1 shrink-0">
+                            <button type="button" onclick="updateCartQty(${idx}, -1)" aria-label="Decrease quantity" class="w-6 h-6 rounded-lg bg-white/10 hover:bg-rose-600 text-white text-xs font-black flex items-center justify-center transition">
+                                -
+                            </button>
+                            <span class="text-xs font-black text-white w-5 text-center">${item.qty}</span>
+                            <button type="button" onclick="updateCartQty(${idx}, 1)" aria-label="Increase quantity" class="w-6 h-6 rounded-lg bg-white/10 hover:bg-emerald-600 text-white text-xs font-black flex items-center justify-center transition">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                checkoutBtn.disabled = false;
+            }
+
+            const { subtotal, discount, gst, totalPayable, couponNote } = computeBillTotals();
+            document.getElementById('bill-subtotal').textContent = `₹${subtotal}`;
+            document.getElementById('bill-gst').textContent = `₹${gst}`;
+            document.getElementById('bill-total').textContent = `₹${totalPayable}`;
+
+            const discRow = document.getElementById('bill-discount-row');
+            if (discount > 0 && state.appliedCoupon) {
+                discRow.classList.remove('hidden');
+                discRow.classList.add('flex');
+                document.getElementById('bill-discount-label').textContent = `Promo (${state.appliedCoupon.code})`;
+                document.getElementById('bill-discount-value').textContent = `-₹${discount}`;
+            } else {
+                discRow.classList.add('hidden');
+                discRow.classList.remove('flex');
+            }
+
+            if (feedbackEl) {
+                if (couponNote) {
+                    const valid = discount > 0;
+                    feedbackEl.className = `text-[11px] font-bold ${valid ? 'text-emerald-300' : 'text-amber-300'}`;
+                    feedbackEl.textContent = couponNote;
+                } else if (!state.appliedCoupon) {
+                    feedbackEl.className = 'text-[11px] text-slate-400';
+                    feedbackEl.textContent = 'MANNU25: ₹25 off on ₹249+ • PIZZA20: 20% off on ₹399+';
+                }
+            }
+
+            const badge = document.getElementById('checkout-payable-badge');
+            if (badge) badge.textContent = `Payable Total: ₹${totalPayable} (incl. 5% GST)`;
+        }
+
+        function openCartDrawer() {
+            updateCartUI();
+            document.getElementById('cart-backdrop').classList.remove('hidden');
+            document.getElementById('cart-drawer').classList.remove('hidden');
+        }
+
+        function closeCartDrawer() {
+            document.getElementById('cart-backdrop').classList.add('hidden');
+            document.getElementById('cart-drawer').classList.add('hidden');
+        }
+
+        // =====================================================================
+        // STANDARDS-COMPLIANT QR CODE GENERATOR (qrcode-generator + ISO FALLBACK)
+        // =====================================================================
+        const ISO_QR_FALLBACK = (() => {
+            const EXP = new Uint8Array(256);
+            const LOG = new Uint8Array(256);
+            (() => {
+                let x = 1;
+                for (let i = 0; i < 255; i++) {
+                    EXP[i] = x;
+                    LOG[x] = i;
+                    x <<= 1;
+                    if (x & 0x100) x ^= 0x11d;
+                }
+                EXP[255] = EXP[0];
+            })();
+
+            function gfMul(a, b) {
+                if (a === 0 || b === 0) return 0;
+                return EXP[(LOG[a] + LOG[b]) % 255];
+            }
+
+            function rsGeneratorPoly(ecLen) {
+                let poly = [1];
+                for (let i = 0; i < ecLen; i++) {
+                    const next = new Array(poly.length + 1).fill(0);
+                    const factor = EXP[i];
+                    for (let j = 0; j < poly.length; j++) {
+                        next[j] ^= poly[j];
+                        next[j + 1] ^= gfMul(poly[j], factor);
+                    }
+                    poly = next;
+                }
+                return poly;
+            }
+
+            function rsComputeEc(dataBytes, ecLen) {
+                const gen = rsGeneratorPoly(ecLen);
+                const msg = dataBytes.concat(new Array(ecLen).fill(0));
+                for (let i = 0; i < dataBytes.length; i++) {
+                    const coef = msg[i];
+                    if (coef !== 0) {
+                        for (let j = 0; j < gen.length; j++) {
+                            msg[i + j] ^= gfMul(gen[j], coef);
+                        }
+                    }
+                }
+                return msg.slice(dataBytes.length);
+            }
+
+            const VERSION_SPECS_M = [
+                null,
+                [16, 10, 1],
+                [28, 16, 1],
+                [44, 26, 1],
+                [64, 18, 2],
+                [86, 24, 2],
+                [108, 16, 3],
+                [124, 18, 3],
+                [154, 22, 4],
+                [182, 22, 4],
+                [216, 26, 4]
+            ];
+
+            const ALIGNMENT_CENTERS = [
+                null,
+                [],
+                [6, 18],
+                [6, 22],
+                [6, 26],
+                [6, 30],
+                [6, 34],
+                [6, 22, 38],
+                [6, 24, 42],
+                [6, 26, 46],
+                [6, 28, 50]
+            ];
+
+            function utf8Bytes(str) {
+                if (typeof TextEncoder !== 'undefined') {
+                    return Array.from(new TextEncoder().encode(str));
+                }
+                const out = [];
+                for (let i = 0; i < str.length; i++) {
+                    const c = str.charCodeAt(i);
+                    if (c < 0x80) out.push(c);
+                    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 0x3f));
+                    else out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
+                }
+                return out;
+            }
+
+            function encodeMatrix(text) {
+                const bytes = utf8Bytes(String(text || ''));
+                let version = 10;
+                let spec = VERSION_SPECS_M[10];
+                for (let v = 1; v <= 10; v++) {
+                    const countBits = v < 10 ? 8 : 16;
+                    const neededBytes = Math.ceil((4 + countBits + bytes.length * 8) / 8);
+                    if (neededBytes <= VERSION_SPECS_M[v][0]) {
+                        version = v;
+                        spec = VERSION_SPECS_M[v];
+                        break;
+                    }
+                }
+
+                const [totalDataCw, ecPerBlock, numBlocks] = spec;
+                const countBits = version < 10 ? 8 : 16;
+                const bits = [];
+                const pushBits = (val, len) => {
+                    for (let i = len - 1; i >= 0; i--) bits.push((val >> i) & 1);
+                };
+
+                pushBits(0b0100, 4);
+                const payload = bytes.slice(0, (1 << countBits) - 1);
+                pushBits(payload.length, countBits);
+                payload.forEach(b => pushBits(b, 8));
+
+                const totalDataBits = totalDataCw * 8;
+                pushBits(0, Math.min(4, Math.max(0, totalDataBits - bits.length)));
+                while (bits.length % 8 !== 0 && bits.length < totalDataBits) bits.push(0);
+
+                const dataCw = [];
+                for (let i = 0; i < bits.length; i += 8) {
+                    let v = 0;
+                    for (let j = 0; j < 8; j++) v = (v << 1) | (bits[i + j] || 0);
+                    dataCw.push(v);
+                }
+
+                let padIdx = 0;
+                while (dataCw.length < totalDataCw) {
+                    dataCw.push(padIdx % 2 === 0 ? 0xec : 0x11);
+                    padIdx++;
+                }
+
+                const shortLen = Math.floor(totalDataCw / numBlocks);
+                const longCount = totalDataCw % numBlocks;
+                const dataBlocks = [];
+                const ecBlocks = [];
+                let offset = 0;
+                for (let b = 0; b < numBlocks; b++) {
+                    const len = shortLen + (b >= numBlocks - longCount ? 1 : 0);
+                    const blk = dataCw.slice(offset, offset + len);
+                    offset += len;
+                    dataBlocks.push(blk);
+                    ecBlocks.push(rsComputeEc(blk, ecPerBlock));
+                }
+
+                const codewords = [];
+                const maxBlk = Math.max(...dataBlocks.map(d => d.length));
+                for (let i = 0; i < maxBlk; i++) {
+                    for (let b = 0; b < numBlocks; b++) if (i < dataBlocks[b].length) codewords.push(dataBlocks[b][i]);
+                }
+                for (let i = 0; i < ecPerBlock; i++) {
+                    for (let b = 0; b < numBlocks; b++) codewords.push(ecBlocks[b][i]);
+                }
+
+                const size = version * 4 + 17;
+                const grid = Array.from({ length: size }, () => new Int8Array(size));
+                const reserved = Array.from({ length: size }, () => new Uint8Array(size));
+
+                const setMod = (r, c, val) => {
+                    if (r >= 0 && r < size && c >= 0 && c < size) {
+                        grid[r][c] = val ? 1 : 0;
+                        reserved[r][c] = 1;
+                    }
+                };
+
+                const drawFinder = (tr, tc) => {
+                    for (let r = -1; r <= 7; r++) {
+                        for (let c = -1; c <= 7; c++) {
+                            const inBox = r >= 0 && r <= 6 && c >= 0 && c <= 6;
+                            const onOuter = r === 0 || r === 6 || c === 0 || c === 6;
+                            const inCenter = r >= 2 && r <= 4 && c >= 2 && c <= 4;
+                            setMod(tr + r, tc + c, inBox && (onOuter || inCenter) ? 1 : 0);
+                        }
+                    }
+                };
+
+                drawFinder(0, 0);
+                drawFinder(0, size - 7);
+                drawFinder(size - 7, 0);
+
+                const centers = ALIGNMENT_CENTERS[version] || [];
+                for (const r of centers) {
+                    for (const c of centers) {
+                        if (reserved[r][c]) continue;
+                        for (let dr = -2; dr <= 2; dr++) {
+                            for (let dc = -2; dc <= 2; dc++) {
+                                const dist = Math.max(Math.abs(dr), Math.abs(dc));
+                                setMod(r + dr, c + dc, dist === 2 || dist === 0 ? 1 : 0);
+                            }
+                        }
+                    }
+                }
+
+                for (let i = 8; i < size - 8; i++) {
+                    if (!reserved[6][i]) setMod(6, i, i % 2 === 0 ? 1 : 0);
+                    if (!reserved[i][6]) setMod(i, 6, i % 2 === 0 ? 1 : 0);
+                }
+                setMod(4 * version + 9, 8, 1);
+
+                for (let i = 0; i < 9; i++) {
+                    if (i < size) {
+                        reserved[8][i] = 1;
+                        reserved[i][8] = 1;
+                    }
+                }
+                for (let i = 0; i < 8; i++) {
+                    reserved[8][size - 1 - i] = 1;
+                    reserved[size - 1 - i][8] = 1;
+                }
+                if (version >= 7) {
+                    for (let i = 0; i < 6; i++) {
+                        for (let j = 0; j < 3; j++) {
+                            reserved[i][size - 11 + j] = 1;
+                            reserved[size - 11 + j][i] = 1;
+                        }
+                    }
+                }
+
+                let bitIdx = 0;
+                const totalBits = codewords.length * 8;
+                let upward = true;
+                for (let col = size - 1; col > 0; col -= 2) {
+                    if (col === 6) col = 5;
+                    for (let off = 0; off < size; off++) {
+                        const row = upward ? size - 1 - off : off;
+                        for (let cOff = 0; cOff < 2; cOff++) {
+                            const c = col - cOff;
+                            if (reserved[row][c]) continue;
+                            let bit = 0;
+                            if (bitIdx < totalBits) {
+                                bit = (codewords[bitIdx >> 3] >> (7 - (bitIdx & 7))) & 1;
+                                bitIdx++;
+                            }
+                            grid[row][c] = bit;
+                        }
+                    }
+                    upward = !upward;
+                }
+
+                const masks = [
+                    (r, c) => (r + c) % 2 === 0,
+                    (r) => r % 2 === 0,
+                    (_, c) => c % 3 === 0,
+                    (r, c) => (r + c) % 3 === 0,
+                    (r, c) => (Math.floor(r / 2) + Math.floor(c / 3)) % 2 === 0,
+                    (r, c) => ((r * c) % 2) + ((r * c) % 3) === 0,
+                    (r, c) => (((r * c) % 2) + ((r * c) % 3)) % 2 === 0,
+                    (r, c) => (((r + c) % 2) + ((r * c) % 3)) % 2 === 0
+                ];
+
+                let bestGrid = grid;
+                let bestScore = Infinity;
+                for (let m = 0; m < 8; m++) {
+                    const cand = grid.map(row => row.slice());
+                    for (let r = 0; r < size; r++) {
+                        for (let c = 0; c < size; c++) {
+                            if (!reserved[r][c] && masks[m](r, c)) cand[r][c] ^= 1;
+                        }
+                    }
+                    const data = ((0b00 << 3) | m) & 0x1f;
+                    let rem = data << 10;
+                    for (let i = 14; i >= 10; i--) {
+                        if ((rem >> i) & 1) rem ^= 0x537 << (i - 10);
+                    }
+                    const fmt = (((data << 10) | rem) ^ 0x5412) & 0x7fff;
+                    const topLeft = [
+                        [0, 8], [1, 8], [2, 8], [3, 8], [4, 8], [5, 8], [7, 8], [8, 8],
+                        [8, 7], [8, 5], [8, 4], [8, 3], [8, 2], [8, 1], [8, 0]
+                    ];
+                    for (let i = 0; i < 15; i++) {
+                        const [r, c] = topLeft[i];
+                        cand[r][c] = (fmt >> (14 - i)) & 1;
+                    }
+                    for (let i = 0; i < 7; i++) cand[size - 1 - i][8] = (fmt >> (14 - i)) & 1;
+                    for (let i = 7; i < 15; i++) cand[8][size - 15 + i] = (fmt >> (14 - i)) & 1;
+
+                    let score = 0;
+                    for (let r = 0; r < size; r++) {
+                        let run = 1;
+                        for (let c = 1; c < size; c++) {
+                            if (cand[r][c] === cand[r][c - 1]) run++;
+                            else {
+                                if (run >= 5) score += 3 + (run - 5);
+                                run = 1;
+                            }
+                        }
+                        if (run >= 5) score += 3 + (run - 5);
+                    }
+                    for (let r = 0; r < size - 1; r++) {
+                        for (let c = 0; c < size - 1; c++) {
+                            const v = cand[r][c];
+                            if (v === cand[r][c + 1] && v === cand[r + 1][c] && v === cand[r + 1][c + 1]) score += 3;
+                        }
+                    }
+                    if (score < bestScore) {
+                        bestScore = score;
+                        bestGrid = cand;
+                    }
+                }
+
+                return {
+                    getModuleCount: () => size,
+                    isDark: (r, c) => bestGrid[r][c] === 1
+                };
+            }
+
+            return { encodeMatrix };
+        })();
+
+        // Obtain a standards-compliant QR matrix using qrcode-generator (CDN) with ISO fallback
+        function buildStandardsCompliantQrMatrix(upiUri) {
+            try {
+                if (typeof window.qrcode === 'function') {
+                    // Auto typeNumber (0) with Error Correction Level 'M' (~15%) for scanner reliability
+                    const qr = window.qrcode(0, 'M');
+                    qr.addData(String(upiUri));
+                    qr.make();
+                    const count = qr.getModuleCount();
+                    return {
+                        count,
+                        isDark: (r, c) => Boolean(qr.isDark(r, c))
+                    };
+                }
+            } catch (err) {
+                // Fall through to deterministic ISO matrix fallback
+            }
+            const fb = ISO_QR_FALLBACK.encodeMatrix(String(upiUri));
+            return {
+                count: fb.getModuleCount(),
+                isDark: (r, c) => fb.isDark(r, c)
+            };
+        }
+
+        // Draw high-contrast scannable QR onto a target <canvas> with a generous quiet zone
+        function drawQrMatrixToCanvas(canvasId, upiUri) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            const matrix = buildStandardsCompliantQrMatrix(upiUri);
+            const count = matrix.count;
+            const quietZone = 5;
+            const totalModules = count + quietZone * 2;
+            const targetSize = 320;
+            const scale = Math.max(5, Math.floor(targetSize / totalModules));
+            const drawSize = totalModules * scale;
+
+            canvas.width = drawSize;
+            canvas.height = drawSize;
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, drawSize, drawSize);
+
+            ctx.fillStyle = '#090d16';
+            for (let r = 0; r < count; r++) {
+                for (let c = 0; c < count; c++) {
+                    if (matrix.isDark(r, c)) {
+                        ctx.fillRect((c + quietZone) * scale, (r + quietZone) * scale, scale, scale);
+                    }
+                }
+            }
+        }
+
+        // Build exact UPI payment intent URI for any rupee amount & item/order label
+        function buildExactUpiUri(amount, label = 'MANNU PIZZA Order') {
+            const safeAmount = Math.max(1, Math.round(Number(amount) || 1));
+            const cleanLabel = String(label || 'MANNU PIZZA Order').trim().slice(0, 40);
+            return `upi://pay?pa=manauwa098765@nyes&pn=MANAUWAR%20REZA&am=${safeAmount}&cu=INR&tn=${encodeURIComponent(cleanLabel)}`;
+        }
+
+        // =====================================================================
+        // PER-PRICE UPI QR CODE MODAL (OPENS WHEN ANY PRICE IS CLICKED)
+        // =====================================================================
+        function openPerPriceQrModal(itemId, sizeLabel, exactAmount) {
+            const item = MENU_ITEMS.find(m => m.id === itemId);
+            const safeAmount = Math.max(1, Math.round(Number(exactAmount) || 1));
+            const itemName = item ? item.name : 'MANNU PIZZA Item';
+            const cleanSize = sizeLabel || 'Regular';
+
+            state.perPriceModalSelection = {
+                itemId,
+                itemName,
+                size: cleanSize,
+                amount: safeAmount
+            };
+
+            const tnLabel = `MANNU PIZZA ${itemName} ${cleanSize}`;
+            const upiUri = buildExactUpiUri(safeAmount, tnLabel);
+
+            document.getElementById('per-price-modal-title').textContent = `Pay ₹${safeAmount} — ${itemName}`;
+            document.getElementById('per-price-item-label').textContent = `${itemName} (${cleanSize})`;
+            document.getElementById('per-price-meta-label').textContent = `Exact Price QR • Receiver: MANAUWAR REZA`;
+            document.getElementById('per-price-amount-badge').textContent = `₹${safeAmount}`;
+            document.getElementById('per-price-qr-caption').textContent = `₹${safeAmount}`;
+            document.getElementById('per-price-uri-text').textContent = upiUri;
+            document.getElementById('per-price-add-btn-label').textContent = `Add ${itemName} (${cleanSize}) • ₹${safeAmount} to Cart`;
+
+            const upiAnchor = document.getElementById('per-price-upi-link');
+            if (upiAnchor) {
+                upiAnchor.href = upiUri;
+            }
+
+            drawQrMatrixToCanvas('per-price-qr-canvas', upiUri);
+            document.getElementById('per-price-qr-modal').classList.remove('hidden');
+        }
+
+        function closePerPriceQrModal() {
+            document.getElementById('per-price-qr-modal').classList.add('hidden');
+        }
+
+        function togglePerPriceReferenceScan() {
+            const panel = document.getElementById('per-price-ref-panel');
+            if (panel) {
+                panel.classList.toggle('hidden');
+            }
+        }
+
+        function downloadPerPriceQrPng() {
+            try {
+                const sel = state.perPriceModalSelection;
+                const amount = sel ? sel.amount : 1;
+                const slug = sel ? `${sel.itemName}-${sel.size}`.replace(/[^a-zA-Z0-9]+/g, '-') : 'MANNU-PIZZA';
+                const upiUri = buildExactUpiUri(amount, sel ? `MANNU PIZZA ${sel.itemName} ${sel.size}` : 'MANNU PIZZA Order');
+                drawQrMatrixToCanvas('per-price-qr-canvas', upiUri);
+
+                const canvas = document.getElementById('per-price-qr-canvas');
+                if (!canvas) return;
+                const fileName = `MANNU-PIZZA-${slug}-Rs${amount}.png`;
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showToast(`Downloaded QR code (${fileName})`);
+            } catch (err) {
+                showToast('Unable to download QR code right now.', true);
+            }
+        }
+
+        function addPerPriceModalItemToCart() {
+            const sel = state.perPriceModalSelection;
+            if (!sel) return;
+            addItemToCart(sel.itemId, sel.size);
+            closePerPriceQrModal();
+            openCartDrawer();
+        }
+
+        // =====================================================================
+        // 3-STEP CHECKOUT: STEP 1 ADDRESS -> STEP 2 PAYMENT -> STEP 3 WHATSAPP
+        // =====================================================================
+        function startThreeStepCheckout() {
+            if (state.cart.length === 0) return;
+            closeCartDrawer();
+
+            const nameInput = document.getElementById('cust-name');
+            if (nameInput && !nameInput.value.trim() && state.currentUser && state.currentUser.name !== 'Mannu Customer') {
+                nameInput.value = state.currentUser.name;
+            }
+            const addrInput = document.getElementById('cust-address');
+            if (addrInput && !addrInput.value.trim()) {
+                addrInput.value = `Near Main Chowk, ${state.selectedLocation}`;
+            }
+
+            openCheckoutModalAtStep(state.orderCreated ? 3 : 1);
+        }
+
+        function openCheckoutModalAtStep(stepNum) {
+            if (stepNum === 3 && !state.orderCreated) {
+                stepNum = state.paymentVerified ? 2 : 1;
+            }
+            state.checkoutStep = stepNum;
+            hideCheckoutError();
+            updateCartUI();
+
+            const titles = {
+                1: 'Step 1: Delivery Address',
+                2: 'Step 2: UPI Payment Verification',
+                3: 'Step 3: Order Confirmed & WhatsApp Proof'
+            };
+            document.getElementById('checkout-modal-title').textContent = titles[stepNum] || titles[1];
+
+            document.getElementById('checkout-step-1').classList.toggle('hidden', stepNum !== 1);
+            document.getElementById('checkout-step-2').classList.toggle('hidden', stepNum !== 2);
+            document.getElementById('checkout-step-3').classList.toggle('hidden', stepNum !== 3);
+
+            [1, 2, 3].forEach(n => {
+                const pill = document.getElementById(`step-pill-${n}`);
+                if (!pill) return;
+                if (n < stepNum) {
+                    pill.className = 'py-1.5 px-2 rounded-xl bg-emerald-500/25 text-emerald-300 border border-emerald-400/30 text-center';
+                } else if (n === stepNum) {
+                    pill.className = 'py-1.5 px-2 rounded-xl bg-amber-400 text-slate-950 text-center';
+                } else {
+                    pill.className = 'py-1.5 px-2 rounded-xl bg-white/10 text-slate-400 text-center';
+                }
+            });
+
+            if (stepNum === 2) {
+                const { totalPayable } = computeBillTotals();
+                const upiUri = buildExactUpiUri(totalPayable, 'MANNU PIZZA Cart Order');
+                const upiLink = document.getElementById('upi-deep-link-btn');
+                if (upiLink) {
+                    upiLink.href = upiUri;
+                }
+                const intentPreview = document.getElementById('upi-qr-intent-preview');
+                if (intentPreview) {
+                    intentPreview.textContent = upiUri;
+                }
+                const amtLabel = document.getElementById('qr-amount-label');
+                if (amtLabel) {
+                    amtLabel.textContent = `₹${totalPayable}`;
+                }
+                drawQrMatrixToCanvas('scannable-upi-qr-canvas', upiUri);
+            }
+
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        function goToCheckoutStep(stepNum) {
+            hideCheckoutError();
+            openCheckoutModalAtStep(stepNum);
+        }
+
+        function showCheckoutError(msg) {
+            const box = document.getElementById('checkout-error-banner');
+            box.textContent = msg;
+            box.classList.remove('hidden');
+        }
+
+        function hideCheckoutError() {
+            const box = document.getElementById('checkout-error-banner');
+            if (box) {
+                box.classList.add('hidden');
+                box.textContent = '';
+            }
+        }
+
+        // Step 1 validates address details and advances to Step 2
+        function submitStepOneAddress(event) {
+            event.preventDefault();
+            hideCheckoutError();
+
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.replace(/\D/g, '');
+            const address = document.getElementById('cust-address').value.trim();
+
+            if (name.length < 2) {
+                showCheckoutError('Please enter your full name.');
+                return;
+            }
+            if (phone.length !== 10) {
+                showCheckoutError('Please enter a valid 10-digit mobile number.');
+                return;
+            }
+            if (address.length < 6) {
+                showCheckoutError('Please enter a complete delivery address in Bahadurganj, Bihar.');
+                return;
+            }
+
+            state.checkoutCustomer = { name, phone, address };
+            openCheckoutModalAtStep(2);
+        }
+
+        function copyUpiId() {
+            const upi = 'manauwa098765@nyes';
+            try {
+                const temp = document.createElement('textarea');
+                temp.value = upi;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                showToast('Copied UPI ID: manauwa098765@nyes');
+            } catch (e) {
+                showToast('UPI ID: manauwa098765@nyes');
+            }
+        }
+
+        function toggleReferenceQrPanel() {
+            const panel = document.getElementById('ref-qr-panel');
+            if (!panel) return;
+            panel.classList.toggle('hidden');
+        }
+
+        function downloadScannableQrPng() {
+            try {
+                const { totalPayable } = computeBillTotals();
+                const upiUri = buildExactUpiUri(totalPayable, 'MANNU PIZZA Cart Order');
+                drawQrMatrixToCanvas('scannable-upi-qr-canvas', upiUri);
+                const canvas = document.getElementById('scannable-upi-qr-canvas');
+                if (!canvas) return;
+
+                const fileName = `MANNU-PIZZA-UPI-QR-Rs${Math.max(1, totalPayable)}.png`;
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showToast(`Downloaded scannable QR code (${fileName})`);
+            } catch (err) {
+                showToast('Unable to download QR code right now.', true);
+            }
+        }
+
+        // Step 2 verifies 6+ char UTR/ref before creating the order
+        function verifyPaymentAndUnlockStep3() {
+            hideCheckoutError();
+            const utrRaw = (document.getElementById('utr-input')?.value || '').trim();
+            if (utrRaw.length < 6) {
+                showCheckoutError('Payment not verified: Please enter a valid UTR / Transaction ID of at least 6 characters.');
+                return;
+            }
+
+            const { totalPayable, subtotal, discount, gst } = computeBillTotals();
+            const orderId = `#MP${Math.floor(1000 + Math.random() * 9000)}`;
+            const itemsSummary = state.cart
+                .map(i => `${i.name} (${i.size}) x${i.qty} = ₹${i.unitPrice * i.qty}`)
+                .join(', ');
+
+            state.paymentVerified = true;
+            state.orderCreated = true;
+            state.whatsappProofSent = false;
+            state.trackerUnlocked = false;
+
+            state.currentOrder = {
+                orderId,
+                utr: utrRaw.toUpperCase(),
+                customer: { ...state.checkoutCustomer },
+                zone: state.selectedLocation,
+                items: [...state.cart],
+                itemsSummary,
+                subtotal,
+                discount,
+                gst,
+                totalPayable
+            };
+
+            state.cart = [];
+            state.appliedCoupon = null;
+            document.getElementById('coupon-code-input').value = '';
+            updateCartUI();
+
+            document.getElementById('step3-order-id').textContent = orderId;
+            document.getElementById('step3-summary-text').textContent =
+                `Order ${orderId} for ${state.currentOrder.customer.name} (${state.currentOrder.customer.phone}) • Paid ₹${totalPayable} (UTR: ${state.currentOrder.utr}) • Address: ${state.currentOrder.customer.address}`;
+
+            const trackerBtn = document.getElementById('step3-open-tracker-btn');
+            trackerBtn.disabled = true;
+            trackerBtn.textContent = 'Open 30-Minute Live Order Tracker (Unlocks After WhatsApp Click)';
+
+            syncTrackerView();
+            openCheckoutModalAtStep(3);
+            showToast('Payment verified! Now send order & screenshot proof on WhatsApp.');
+        }
+
+        function buildWhatsAppProofUrl() {
+            const ord = state.currentOrder;
+            if (!ord) {
+                return `https://wa.me/918700475480?text=${encodeURIComponent('Hello MANNU PIZZA (+918700475480), I want to share my order and payment screenshot proof.')}`;
+            }
+            const lines = [
+                `*MANNU PIZZA — Order & Payment Proof*`,
+                `Order ID: ${ord.orderId}`,
+                `Customer: ${ord.customer.name} (${ord.customer.phone})`,
+                `Delivery Address: ${ord.customer.address}`,
+                `Items: ${ord.itemsSummary}`,
+                `Paid Amount: ₹${ord.totalPayable} (GST ₹${ord.gst})`,
+                `UTR / Txn ID: ${ord.utr}`,
+                `Receiver: MANAUWAR REZA (manauwa098765@nyes)`,
+                `Note: Attaching payment screenshot herewith.`
+            ].join('\n');
+            return `https://wa.me/918700475480?text=${encodeURIComponent(lines)}`;
+        }
+
+        // Step 3 WhatsApp proof link unlocks the 30-minute live tracker once clicked
+        function openWhatsAppProofLink() {
+            const url = buildWhatsAppProofUrl();
+            window.open(url, '_blank', 'noopener,noreferrer');
+
+            if (state.orderCreated) {
+                state.whatsappProofSent = true;
+                state.trackerUnlocked = true;
+                startThirtyMinuteCountdown();
+                syncTrackerView();
+
+                const trackerBtn = document.getElementById('step3-open-tracker-btn');
+                trackerBtn.disabled = false;
+                trackerBtn.className = 'w-full py-2.5 px-4 rounded-2xl font-black text-xs text-slate-950 bg-amber-400 hover:bg-amber-300 transition';
+                trackerBtn.textContent = 'Live Tracker Unlocked — View 30-Min Order Tracker';
+                showToast('WhatsApp proof link opened! 30-minute Live Tracker unlocked.');
+            }
+        }
+
+        function viewLiveTrackerAfterProof() {
+            if (!state.trackerUnlocked) return;
+            closeCheckoutModal();
+            switchStoreView('track');
+        }
+
+        // =====================================================================
+        // 30-MINUTE LIVE ORDER TRACKER (STRICTLY LOCKED UNTIL WHATSAPP PROOF)
+        // =====================================================================
+        function startThirtyMinuteCountdown() {
+            clearInterval(state.countdownInterval);
+            state.countdownSeconds = 30 * 60;
+            renderCountdownClock();
+
+            state.countdownInterval = setInterval(() => {
+                if (state.countdownSeconds > 0) {
+                    state.countdownSeconds -= 1;
+                    renderCountdownClock();
+                } else {
+                    clearInterval(state.countdownInterval);
+                }
+            }, 1000);
+        }
+
+        function renderCountdownClock() {
+            const el = document.getElementById('tracker-countdown');
+            if (!el) return;
+            const mins = String(Math.floor(state.countdownSeconds / 60)).padStart(2, '0');
+            const secs = String(state.countdownSeconds % 60).padStart(2, '0');
+            el.textContent = `${mins}:${secs}`;
+        }
+
+        function syncTrackerView() {
+            const lockedCard = document.getElementById('tracker-locked-card');
+            const unlockedCard = document.getElementById('tracker-unlocked-card');
+            const lockIcon = document.getElementById('mob-track-lock-icon');
+            const reopenProofBtn = document.getElementById('tracker-reopen-proof-btn');
+            const lockReason = document.getElementById('tracker-lock-reason');
+
+            const isUnlocked = Boolean(state.orderCreated && state.whatsappProofSent && state.trackerUnlocked && state.currentOrder);
+
+            if (lockIcon) {
+                lockIcon.className = isUnlocked ? 'fa-solid fa-motorcycle text-sm text-emerald-400' : 'fa-solid fa-lock text-sm';
+            }
+
+            if (!isUnlocked) {
+                lockedCard?.classList.remove('hidden');
+                unlockedCard?.classList.add('hidden');
+                if (state.orderCreated && !state.whatsappProofSent) {
+                    if (lockReason) {
+                        lockReason.textContent = `Order ${state.currentOrder.orderId} is verified, but the tracker stays locked until you click "Send Order & Payment Proof on WhatsApp (+918700475480)".`;
+                    }
+                    reopenProofBtn?.classList.remove('hidden');
+                } else {
+                    if (lockReason) {
+                        lockReason.textContent = 'Complete your order in the cart, verify payment in Step 2, and click "Send Order & Payment Proof on WhatsApp (+918700475480)" in Step 3 to unlock the 30-minute live order tracker.';
+                    }
+                    reopenProofBtn?.classList.add('hidden');
+                }
+                return;
+            }
+
+            lockedCard?.classList.add('hidden');
+            unlockedCard?.classList.remove('hidden');
+
+            const ord = state.currentOrder;
+            document.getElementById('tracked-order-id').textContent = `Order ${ord.orderId} • ${ord.itemsSummary}`;
+            document.getElementById('tracked-order-address').textContent = `Delivering to ${ord.customer.name} (${ord.customer.phone}) — ${ord.customer.address}`;
+            document.getElementById('tracked-utr-ref').textContent = ord.utr;
+            document.getElementById('tracked-paid-total').textContent = `₹${ord.totalPayable}`;
+            renderCountdownClock();
+
+            const stages = [
+                { title: 'Proof Sent', desc: 'WhatsApp proof shared', done: true },
+                { title: 'Preparing Pizza', desc: 'Hot oven in Bahadurganj', done: true },
+                { title: 'Out for Delivery', desc: 'Rider on the way', done: true },
+                { title: 'Delivered', desc: 'Within 30 mins', done: false }
+            ];
+
+            document.getElementById('tracker-stages-list').innerHTML = stages.map(st => `
+                <div class="rounded-2xl p-3.5 border ${st.done ? 'bg-emerald-950/35 border-emerald-400/35 text-white' : 'bg-white/5 border-white/10 text-slate-400'}">
+                    <div class="flex items-center justify-between text-xs font-black">
+                        <span>${st.title}</span>
+                        <i class="fa-solid ${st.done ? 'fa-circle-check text-emerald-400' : 'fa-clock text-slate-500'}"></i>
+                    </div>
+                    <p class="text-[11px] mt-1 text-slate-300">${st.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        // Initial render on load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderStorefront();
+            renderPriceList();
+            updateCartUI();
+            syncTrackerView();
+        });
+    </script>
+</body>
+</html>
